@@ -33,23 +33,23 @@ Si noti che è comunque possibile contribuire alla repository dedicata su GitHub
 ## Indice
 
 1. **Definizioni Generali**
-    1. [Rete](#1.1-rete)
-    2. [Internet](#1.2-internet)
-    3. [Intranet](#1.3-intranet)
-    4. [Extranet](#1.4-extranet)
-    5. [ISP](#1.5-isp)
-    6. [Protocollo](#1.6-protocollo)
-    7. [Modello client/server](#1.7-modello-client/server)
-    8. [Gateway](#1.8-gateway)
-    9. [LAN](#1.9-lan)
-    10. [MAN](1.10-MAN)
-    11. [WAN](#1.11-WAN)
-    12. [Servizio connection oriented](#1.12-servizio-connection-oriented)
-    13. [Servizio connectionless](#1.13-servizio-connectionless)
-    14. [Servizio best effort](#1.14-servizio-best-effort)
-    15. [Quality of Service](#1.15-quality-of-service)
-    16. [Unicasting, Multicasting e Broadcasting](#1.16-unicasting,-multicasting-e-broadcasting)
-    17. [RFC](#1.17-rfc)
+    1. [Rete](#11-rete)
+    2. [Internet](#12-internet)
+    3. [Intranet](#13-intranet)
+    4. [Extranet](#14-extranet)
+    5. [ISP](#15-isp)
+    6. [Protocollo](#16-protocollo)
+    7. [Modello client/server](#17-modello-client/server)
+    8. [Gateway](#18-gateway)
+    9. [LAN](#19-lan)
+    10. [MAN](110-MAN)
+    11. [WAN](#111-WAN)
+    12. [Servizio connection oriented](#112-servizio-connection-oriented)
+    13. [Servizio connectionless](#113-servizio-connectionless)
+    14. [Servizio best effort](#114-servizio-best-effort)
+    15. [Quality of Service](#115-quality-of-service)
+    16. [Unicasting, Multicasting e Broadcasting](#116-unicasting,-multicasting-e-broadcasting)
+    17. [RFC](#117-rfc)
 
 # 1 Definizioni Generali
 
@@ -103,7 +103,7 @@ Una **MAN (Metropolitan Area Network)** è una rete che copre un’intera città
 
 Una **WAN (Wide Area Network)** è una rete che copre un’area geograficamente estesa, spesso una nazione o un continente. Il numero di reti locali o singoli computer che si possono connettere ad una singola WAN è teoricamente illimitato.
 
-## Servizio connection oriented
+## 1.12 Servizio connection oriented
 
 Un servizio **connection oriented (orientato alla connessione)** è un servizio di rete in cui l’utente che lo vuole usare deve _stabilire una connessione_ (mediante la creazione di un circuito, che sia fisico o virtuale), _usarla_ e quindi _rilasciarla_. Nella maggior parte dei casi, l’ordine dei bit inviati è conservato e arrivano nella sequenza con cui sono stati trasmessi, che rende questa categoria di servizi **affidabile**.
 
