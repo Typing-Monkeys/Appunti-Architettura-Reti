@@ -48,8 +48,15 @@ Si noti che è comunque possibile contribuire alla repository dedicata su GitHub
     13. [Servizio connectionless](#113-servizio-connectionless)
     14. [Servizio best effort](#114-servizio-best-effort)
     15. [Quality of Service](#115-quality-of-service)
-    16. [Unicasting, Multicasting e Broadcasting](#116-unicasting,-multicasting-e-broadcasting)
+    16. [Unicasting, Multicasting e Broadcasting](#116-unicasting-multicasting-e-broadcasting)
     17. [RFC](#117-rfc)
+2. **Le Architetture di Rete**
+    1. [Il modello di riferimento ISO/OSI](#21-il-modello-di-riferimento-iso/osi)
+    2. [Il modello di riferimento TCP/IP](#22-il-modello-di-riferimento-tcp/ip)
+3. **Internet Protocol (IP)**
+    1. [Datagram IP](#31-datagram-ip)
+        1. [IPv4](#311-ipv4)
+
 
 # 1 Definizioni Generali
 
@@ -131,6 +138,86 @@ Il termine **Quality of Service** (abbreviato **QoS**) è utilizzato per indicar
 * Multicasting: trasmissione di dati tra un trasmettitore ed un sottoinsieme di tutte le macchine della rete (1-n);
 * Broadcasting: trasmissione di dati tra un trasmettitore e tutte le macchine della rete (1-tutti).
 
+
 ## 1.17 RFC
 
 Gli **RFC (Request For Comment)**, sono una serie di rapporti tecnici numerati cronologicamente che riportano informazioni o specifiche riguardanti nuove ricerche, innovazioni e metodologie di Internet. Sono redatti da un organismo internazionale chiamato **IETF (Internet Engineering Task Force)**, e sono tutti consultabili su [www.ietf.org/rfc/](www.ietf.org/rfc/). 
+
+
+# 2 Le Architetture di Rete
+
+Esistono due importanti architetture di rete: il modello di riferimento **OSI** e il modello **TCP/IP**. Anche se i protocolli associati al modello OSI ormai sono in disuso, il modello in  sé ha valore generale ed è ancora valido, e le caratteristiche discusse per ogni livellosono ancora molto importanti. Il modello TCP/IP ha caratteristiche opposte: il modello in sé è poco utilizzabile, ma i protocolli sono largamente impiegati; per questo motivo vanno esaminati entrambi in dettaglio. A volte s’impara più dai fallimenti che dai successi.
+
+![Osi e TCP/IP](./imgs/osi_e_tcpip.png)
+
+
+## 2.1 Il modello di riferimento ISO/OSI
+
+L’ISO (International Standards Organization) è un organo consulente dell’ONU, che promuove lo sviluppo di standardizzazioni nel mondo. È il creatore dell’**OSI** (**_Open Systems Interconnections_**), così chiamato perché riguarda la connessione di sistemi aperti, cioè sistemi che sono “aperti” verso la comunicazione con altri. È uno standard **_de jure_** ("per legge", ovvero formale, adottato da qualche organismo di standardizzazione autorizzato, in questo caso ISO). È caratterizzato da **7 livelli**: ogni livello sfrutta i servizi dei livelli inferiori. La comunicazione tra livelli adiacenti avviene tramite i **NAP (Neutral Access Points)**, mentre la comunicazione tra entità di livelli diversi avviene tramite il **SAP (Service Access Point)**. Le operazioni specifiche di un livello sono realizzate tramite un insieme di protocolli. Di seguito una breve descrizione di ogni livello:
+
+
+**Physical Layer**: si occupa della trasmissione di bit grezzi sul canale di comunicazione. È l’insieme di regole che specificano le connessioni elettriche e fisiche tra i dispositivi. Definisce la specifica dei cavi e del tipo di segnale elettrico associato ai vari pin.
+
+
+**Data Link Layer**: definisce l’accesso al mezzo specificato nel Physical Layer, il formato dei dati ed è responsabile dell’invio affidabile delle informazioni, ovvero gestisce tra le altre cose la frammentazione dei dati e le procedure di controllo di possibili errori del livello fisico. Appartengono a questo livello i protocolli Data Link (DLCP, BSC, HDLC...), sono inoltre presenti anche i sottolivelli LLC e MAC e hardware come Network Interface Card (NIC), Hub, Switch (di livello 2) e Bridge.
+
+
+**Network Layer**: si occupa della connessione tra due nodi della rete (detti nodo sorgente e nodo destinatario). Gestisce il routing e lo scambio di informazione tra i nodi. I servizi associati a questo livello sono legati al movimento dei dati nella rete, inclusi l’indirizzamento, il routing e le procedure di controllo dei flussi (vengono definite le raccomandazioni X.25 e X.75). A questo livello appartiene il protocollo IP.
+
+
+**Transport Layer**: è il garante del trasferimento delle informazioni. Analizza il traffico fra i nodi controllando gli errori, la sequenza e i fattori di affidabilità dello scambio. A questo livello appartengono i protocolli TCP e UDP. È il primo livello **end-to-end**.
+
+
+**Session Layer**: regolarizza l’inizio e la fine dei flussi dei dati fra i nodi. Si occupa dell’organizzazione del dialogo tra i programmi applicativi.
+
+
+**Presentation Layer**: si occupa di effettuare trasformazione sui dati compatibilmente con il dispositivo di ricezione. Esempi di trasformazione riguardano crittografia e compressione.
+
+
+**Application Layer**: è l’ultimo livello, comprende tutti i programmi applicativi che consentono l’uso della rete: fa da interfaccia tra rete e utente. Esempi di funzioni svolte da questo livello possono essere: terminale virtuale, trasferimento di file, posta elettronica, condivisione di risorse e accesso a database.
+
+
+## 2.2 Il modello di riferimento TCP/IP
+
+Il **TCP/IP** è così chiamato per ricordare i suoi protocolli più importanti: il Transmission Control Protocol (TCP) e l'Internet Protocol (IP). È uno standard **_de facto_** ("dalla realtà", ovvero stabilito senza piani formali). Di seguito una breve descrizione di ogni livello:
+
+
+**Host-to-network Layer**: “il grande vuoto”, nel modello di riferimento TCP/IP non viene specificato cosa accade in questo territorio, si limita a segnalare che l’host deve collegarsi alla rete usando qualche protocollo che gli permetta di spedire pacchetti IP. Questo protocollo però non è definito e varia da host a host.
+
+
+**Internet Layer**: il suo scopo è quello di consentire agli host di mandare pacchetti in qualsiasi rete, e farli viaggiare in modo indipendente l’uno dall’altro fino alla destinazione (che magari è su una rete diversa). È importante notare che viene definito il protocollo **IP**.
+
+
+**Transport Layer**: è progettato per consentire la comunicazione tra entità pari degli host sorgente e destinazione, come nel livello trasporto OSI. Sono definiti due protocolli di trasporto end-to-end: **TCP** e **UDP**.
+
+
+**Application Layer**: nel modello TCP/IP non ci sono sessione e presentazione, poiché si è notato che nella maggior parte dei casi sono inutili. Come nel modello OSI, il livello Applicazione contiene un gran numero di programmi che si interfacciano con l’utente.
+
+
+# 3 Internet Protocol (IP)
+
+L’IP è la colla che tiene unito Internet. È il protocollo **connectionless** e **best effort** del livello 3 (Rete) e permette di interconnettere reti eterogenee: per questo è implementato sopra ai protocolli di livello Data Link, svolgendo la funzione di routing (ovvero scegliere il percorso che dovranno seguire i dati, spiegato in seguito).
+
+
+## 3.1 Datagram IP
+
+Il pacchetto utilizzato dall’IP è detto **datagram IP** (per analogia con il servizio telegrafico, telegram service) ed è costituita da una parte di intestazione (detta **header**) e da una parte di testo (detta **data**). La versione attualmente utilizzata è la v4, anche se al momento è in corso una transizione da IPv4 a IPv6, che ha avuto inizio anni fa e il cui completamento richiederà ancora parecchio tempo (o addirittura mai). Di seguito viene analizzato l’header dell’IPv4.
+
+
+### 3.1.1 IPv4
+
+L’intestazione ha una parte fissa di 20 byte e una parte opzionale di lunghezza variabile ed è trasmessa in ordine _big endian_ (da sinistra a destra). Sulle macchine _little endian_ è necessario eseguire una conversione software sia in ricezione che in trasmissione.
+
+![IPv4 Header](./imgs/ipv4_header.png)
+
+* **Version**: campo di 4 bit che indica la versione IP del datagram (attualmente IPv4);
+*  **IHL (Internet Header Length)**: campo di 4 bit che indica la lunghezza dell’header espressa in parole da 32 bit. Necessario poiché, come anticipato, la lunghezza dell’intestazione non è costante;
+* **Type of Service**: campo di 8 bit che indica come deve essere gestito il datagram;
+* **Total Length**: campo lungo 16 bit che identifica la lunghezza totale del datagram; 
+* **Identification, flag, offset**: controllano frammentazione e riassemblaggio del datagram; 
+* **TTL (Time To Live)**: indica la durata in secondi concessa al datagram per restare in rete, evitando che un datagram giri a vuoto per sempre, evento che potrebbe accadere in caso di danneggiamento delle tabelle di routing;
+* **Protocol**: è un codice che identifica il protocollo utilizzato nel campo dati (intuitivamente, può essere associato all’estensione nel nominativo di un file);
+* **Header Checksum**: garantisce il controllo dell’integrità dell’header;
+* **Source address, Destination address**: rispettivamente indirizzo sorgente e indirizzo di destinazione, indicano il numero di rete e il numero di host, espressi tramite indirizzi IP;
+* **Options (opzioni)**: via di fuga per dare alle versioni successive del protocollo la possibilità d’includere informazioni non presenti nel progetto originale.  
+
