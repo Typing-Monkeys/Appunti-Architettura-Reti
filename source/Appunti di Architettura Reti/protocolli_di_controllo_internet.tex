@@ -1,0 +1,46 @@
+\section{Protocolli di controllo Internet}
+    Oltre a IP, utilizzato per il trasferimento dei dati, Internet ha diversi protocolli di controllo
+    utilizzati nel livello network, tra cui \textbf{ICMP}, \textbf{ARP} e \textbf{RARP}.
+
+        \subsection{ICMP}
+        Il funzionamento di Internet è monitorato attentamente dai router. Quando avviene qualcosa
+        di imprevisto, l’evento è comunicato da \textbf{ICMP (Internet Control Message Protocol)}. Svolge
+        inoltre una seconda funzione, che è quella di verificare lo stato della rete. Di seguito i principali
+        tipi di messaggi ICMP.
+
+        %TABELLA ICMP PAGINA 24%
+
+        \subsection{ARP}
+        Un host Internet può comunicare con un altro host solo se conosce il suo indirizzo fisico di rete
+        (MAC), che è anche fondamentale per il funzionamento del gateway al fine di definire il
+        percorso dei pacchetti. Attenzione però: i programmi applicativi in genere conoscono solo il
+        nome dell’host o il suo indirizzo IP.\\
+        
+        \textbf{ARP (Address Resolution Protocol)} fornisce il modo con cui gli indirizzi IP vengono associati
+        agli indirizzi del livello data link (per esempio agli indirizzi Ethernet), risolvendo la
+        corrispondenza Indirizzo IP-Indirizzo fisico.\\
+
+        L’host che ha bisogno dell’indirizzo fisico di un altro host della rete, invia un pacchetto
+        \textbf{broadcast} di richiesta dell’indirizzo al destinatario (includendo il proprio indirizzo fisico di
+        rete), il quale risponde includendo a sua volta l’indirizzo fisico di rete.\\
+
+        In ciascuna macchina è predisposta una cache, che memorizza gli indirizzi richiesti via ARP.
+        Questo risulta utile per velocizzare le consultazioni successive. In particolare, ad ogni richiesta
+        ARP tutti gli host possono aggiornare l’indirizzo fisico del richiedente nella propria cache.
+        
+        \subsection{RARP}
+        Come detto, ARP risolve il problema della scoperta dell’indirizzo Ethernet che corrisponde a un
+        dato indirizzo IP. In qualche caso è utile però risolvere il problema inverso: dato un indirizzo
+        Ethernet, qual è il corrispondente indirizzo IP? Un caso in cui è molto utile risolvere questo
+        problema, è l’avvio delle workstation diskless, che hanno bisogno di richiedere da un file server
+        remoto un’immagine binaria del sistema operativo. In questo caso, come fanno a scoprire il
+        proprio indirizzo IP?\\
+        
+        Ecco quindi che interviene \textbf{RARP (Reverse Address Resolution Protocol)}. RARP effettua una
+        richiesta \textbf{broadcast} contenente il proprio indirizzo Ethernet, in cui domanda se qualcuno
+        conosce il suo indirizzo IP. I server che ricevono la richiesta, cercano l’indirizzo Ethernet nei
+        propri file di configurazione e trasmettono una risposta contenente l’indirizzo IP
+        corrispondente.\\
+
+        Se i riceventi non sanno rispondere, propagano la richiesta ai server secondari.
+        

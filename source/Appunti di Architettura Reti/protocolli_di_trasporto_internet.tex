@@ -1,0 +1,155 @@
+\section{Protocolli Di Trasporto Internet}
+    Il livello trasporto non è uno strato qualsiasi: è il cuore dell’intera gerarchia di protocolli.\\
+    
+    Il suo compito è fornire il trasporto dei dati, affidabile ed efficiente in termini di costi, dal
+    computer di origine a quello di destinazione, indipendentemente dalla rete o dalle reti fisiche
+    effettivamente utilizzate. Senza il livello trasporto, l’intero concetto di protocolli a strati
+    avrebbe poco senso.\\
+    
+    Internet possiede \textbf{due protocolli principali} nel livello trasporto: un protocollo senza
+    connessione e uno orientato alla connessione, rispettivamente UDP e TCP.
+        \subsection{UDP}
+        UDP (User Datagram Protocol, ovvero protocollo per datagrammi utente) offre alle
+        applicazioni un modo per inviare datagrammi IP incapsulati senza dover stabilire una
+        connessione. Pur essendo di conseguenza poco affidabile, esso è impiegato in applicazioni
+        time-sensitive, dove è richiesta velocità elevata: un esempio è lo streaming di video e audio.\\
+        
+        UDP trasmette segmenti costituiti da un’intestazione di 8 byte seguita dal carico utile.
+        % Pacchetto UDP (pagina 33)%
+        \begin{itemize}
+            \item Le \textbf{due porte} servono per identificare i punti finali all’interno dei computer di origine e
+            destinazione. Quando arriva un pacchetto UDP, il suo carico utile è consegnato al
+            processo associato alla porta di destinazione. Senza le porte, il livello trasporto non
+            saprebbe cosa farsene del pacchetto. È utile notare che l’inclusione del campo source
+            port è utile nel caso si debba inviare una risposta all’origine;
+            \item Il campo \textbf{UDP length} include l’intestazione di 8 byte e i dati;
+            \item \textbf{UDP checksum} è utilizzato per verificare l’integrità dei dati. È facoltativo, anche se
+            disattivarlo è insensato a meno che la qualità dei dati non sia importante (per esempio
+            nel caso di voce digitalizzata).
+            
+        \end{itemize}
+        Il protocollo non si occupa del controllo di flusso, del controllo degli errori o della
+        ritrasmissione dopo la ricezione di un segmento errato. Questi compiti sono invece lasciati ai
+        processi utente.\\
+
+        Un’altra funzionalità importante di UDP è il \textbf{multiplexing} di più processi utilizzando le porte,
+        ovvero la trasmissione (praticamente simultanea) di due o più messaggi da parte di due o più
+        processi attraverso la stessa linea.
+        
+        \subsection{TCP}
+        \textit{Il TCP è un argomento abbastanza profondo e complicato e quindi, come anticipato, questo
+        argomento è uno di quelli trattati in maniera semplificata.}\\
+
+        \textbf{TCP (Transmission Control Protocol}, ovvero protocollo di controllo della trasmissione) è un
+        protocollo full-duplex con connessione. Affidabile e di applicabilità generale, è progettato per
+        adattarsi dinamicamente alle peculiarità delle diverse reti che compongono Internet,
+        contribuendo ad isolare le applicazioni dai dettagli di networking.\\
+        
+        In una connessione TCP, ogni byte ha un proprio numero di sequenza a 32 bit. Questa è una
+        funzionalità vitale di TCP.\\
+        
+        Ogni computer che supporta TCP dispone di \textbf{un’entità di trasporto TCP}, che può essere una
+        procedura di libreria, un processo utente o una parte del kernel, ma in tutti i casi gestisce i flussi
+        TCP e le interfacce verso lo strato IP. Le entità TCP di invio e ricezione frazionano i dati in
+        blocchi, detti segmenti. Un \textbf{segmento TCP} consiste di un’intestazione fissa di 20 byte (più una
+        parte facoltativa) seguita da 0 o più byte di dati, ed è il software TCP a decidere la dimensione
+        dei segmenti. Tuttavia, ogni rete ha una \textbf{MTU (Maximum Transfer Unit}, ovvero unità di
+        trasferimento massima) e ogni segmento deve essere contenuto nella MTU, generalmente 1500
+        byte.
+        %Inserire tabella TCP (pagina 34)%
+        \begin{itemize}
+            \item \textbf{Source port e Destination Port}: estremi locali della connessione. Una porta e
+            l’indirizzo IP del suo host formano un end point univoco e identificano quindi la
+            connessione. Questa coppia viene chiamata socket e consente il multiplexing, facendo
+            sì che una certa porta possa essere condivisa da più host;
+            \item \textbf{Sequence number e acknowledgement number}: il primo specifica la posizione del
+            primo byte contenuto nel campo dati all’interno dello stream di byte che il trasmettitore
+            del segmento invia; il secondo specifica la posizione del prossimo byte aspettato
+            all’interno del segmento inviato dal ricevitore del presente segmento;
+            \item \textbf{TCP header length}: numero di parole di 32 bit contenute nell’header (necessario
+            perché options ha lunghezza variabile);
+            \item 6 flags: 
+                \begin{enumerate}
+                    \item \textbf{URG}: 1 se si usa il campo urgent pointer;
+                    \item \textbf{ACK}: 1 se l’ack number è valido (cioè se si trasporta un ack);
+                    \item \textbf{PSH}: 1 se si vuole che i dati vengano consegnati all’applicazione all’arrivo e non
+                    archiviarli in un buffer per poi trasmettere un buffer completo (come potrebbe
+                    fare per migliorare l’efficienza);
+                    \item \textbf{RST}: 1 se si richiede un reset della connessione (per problemi);
+                    \item \textbf{SYN}: usato per stabilire le connessioni:
+                        \begin{itemize}
+                            \item \textbf{SYN=1, ACK=0} $\rightarrow$ richiesta connessione;
+                            \item \textbf{SYN=1, ACK=1} $\rightarrow$ accettata connessione;
+                            \item \textbf{SYN=0, ACK=1} $\rightarrow$ ricevuta la conferma di accettata connessione.
+                        \end{itemize}
+                    \item \textbf{FIN}: usato per rilasciare una connessione: non ci sono altri dati da trasmettere.
+                \end{enumerate}
+            \item \textbf{Window size}: indica quanti byte possono essere inviati a partire da quello che ha
+            ricevuto acknowledgement. Utilizzato per la sliding window, spiegata in seguito;
+            \item \textbf{Checksum}: simile a quello di UDP, verifica che sia l’header che i dati del segmento siano
+            arrivati a destinazione senza errori;
+            \item \textbf{Urgent pointer}: puntatore ai dati urgenti;
+            \item \textbf{Options}: contiene caratteristiche extra non disponibili nella normale intestazione.
+                
+        \end{itemize}
+        Le connessioni in TCP vengono stabilite mediante l’\textbf{handshake a tre vie}. In TCP, client e server
+        tengono traccia di ciò che hanno inviato utilizzando un numero di sequenza, detto \textbf{ISN (Initial
+        Sequence Number)}, un campo di 32 bit inizializzato casualmente che viene inviato nei campi
+        acknowledgement number e sequence number.
+        Per stabilire una connessione, sono necessari 3 passaggi:
+        \begin{enumerate}
+            \item L’host client invia al server un pacchetto preliminare \textbf{(SYN), chiedendo di
+            sincronizzarsi} con il proprio ISN;
+            \item  L’host server riceve il pacchetto SYN, \textbf{riconoscendo} l’ISN del client e predisponendo il
+            buffer che accoglierà i segmenti che gli verranno inviati. Il server si conserva quindi l’ISN
+            del client aumentato di 1, poiché il prossimo pacchetto che gli manderà il client avrà
+            questo ISN. Quindi il server invia al client un altro pacchetto \textbf{(SYNACK), chiedendo di
+            sincronizzarsi} con il proprio ISN;
+            \item Ricevuto il SYNACK, anche il client \textbf{riconosce} l’ISN del server e alloca un buffer per la
+            ricezione dei segmenti, conservando l’ISN del server aumentato di 1 (come ha fatto il
+            server). Invia quindi un ultimo pacchetto (\textbf{ACK}), che sta ad indicare che la connessione
+            è ormai instaurata con successo. 
+                        
+        \end{enumerate}
+
+        I nomi dei pacchetti spediti nei passaggi dell’handshake sono dati per ricordarsi delle flag poste
+        a 1. Si noti che l’inizializzazione casuale dell’ISN è necessaria per diversi motivi, tra cui la
+        sicurezza: un utente terzo potrebbe infatti effettuare spoofing di una delle due parti (ovvero
+        spacciarsi per una delle due parti utilizzando il suo stesso indirizzo IP) e stabilire una
+        connessione con l’altra semplicemente predicendo l’ISN.\\
+        
+        Come anticipato durante la spiegazione dell’intestazione, il protocollo di base utilizzato dalle
+        entità TCP è il protocollo \textbf{sliding window}, utilizzato per il controllo di flusso. Grazie al
+        protocollo sliding window, \underline{il mittente può inviare più di un segmento anche se non ha ancora
+        ricevuto il riscontro per il primo frame inviato}. Comunque, è garantito che nessun segmento
+        andrà perso e che i frame arriveranno nell’ordine corretto. Il protocollo ha questo nome
+        perché utilizza 2 finestre (ovvero 2 intervalli) che vengono modificati durante l’algoritmo,
+        avanzando sui numeri di segmenti spediti e ricevuti:
+        \begin{itemize}
+            \item Una finestra è dedicata al \textbf{mittente}: contiene i numeri dei \textbf{segmenti già spediti} ma per
+            cui non si è ancora ricevuta una conferma (\textbf{no ACK});
+            \item l’altra finestra è per il \textbf{ricevente}: contiene i numeri dei \textbf{segmenti che può ricevere
+        senza doverli subito confermare}.
+        \end{itemize}
+        Quando un mittente invia un segmento, viene fatto partire un timer. Una volta arrivato a
+        destinazione, l’entità TCP ricevente invia un segmento contrassegnato da un numero di
+        acknowledgement uguale al numero di sequenza successivo che prevede di ricevere. Se il timer
+        del mittente scade prima della ricezione dell’acknowledgement, il mittente ritrasmette il
+        segmento.\\
+
+        In sunto, le caratteristiche importanti da ricordare che TCP offre sono le seguenti:
+        \begin{itemize}
+            \item \textbf{Trasferimento bufferizzato}: il trasferimento viene ottimizzato creando pacchetti di
+            dimensione il più possibile simile, accorpando o suddividendo in segmenti;
+            \item \textbf{Orientamento dello stream}: i dati vengono passati al livello applicazione in ordine;
+            \item \textbf{Stream non strutturato}: il servizio di stream del TCP non rispetta eventuali strutture
+            presenti in dati strutturati: la comprensione della forma sta all’applicazione;
+            \item \textbf{Connessione full-duplex}: trasferimento simultaneo in entrambe le direzioni;
+            \item \textbf{Connessione connection oriented}: solo quando mittente e destinatario hanno
+            verificato la sussistenza delle condizioni necessarie, ha inizio il trasferimento;
+            \item \textbf{Riscontro positivo con trasmissione} (acknowledgement): alla ricezione di un
+            pacchetto, il destinatario risponde con un ACK, ossia una conferma di ricezione.
+            Eventualmente il mittente ritrasmette i pacchetti persi;
+            \item \textbf{Sliding Window}: permette una trasmissione ottimizzata, seppure sia comunque più
+            lenta rispetto ad UDP.
+        \end{itemize}

@@ -1,0 +1,350 @@
+\section{Routing}
+    Il \textbf{routing} riguarda il livello 3 del modello di riferimento ISO-OSI ed è l’azione d’\textbf{instradare i
+    pacchetti dal computer sorgente al computer di destinazione}. Nella maggior parte delle
+    sottoreti i pacchetti compiono \textbf{salti multipli} per raggiungere la meta; l’unica eccezione degna
+    di nota riguarda le reti broadcast, ma anche in questo caso se sorgente e destinazione non si
+    trovano sulla stessa rete, il routing è un problema. Consiste in due attività principali:\\
+    
+    \begin{itemize}
+        \item Determinare il percorso migliore;
+        \item Trasportare pacchetti sulla rete.
+    \end{itemize}
+
+    Per riportare eventuali \textbf{malfunzionamenti} nel routing, viene usato \textbf{ICMP}. In particolare, il
+    messaggio \textbf{redirection} indica la necessità di reinstradare i pacchetti in modo migliore, cioè
+    segnala che un router è stato attraversato inutilmente.
+
+        \subsection{Algoritmi di routing}
+        L’\textbf{algoritmo di routing} è quella parte del software del livello network, che si preoccupa di
+        scegliere lungo quale linea di uscita vanno instradati i pacchetti in arrivo.
+        Ad un algoritmo di routing devono appartenere le seguenti \textbf{proprietà}:
+        
+        \begin{itemize}
+            \item \textbf{Semplicità}: consumo di meno risorse possibile;
+            \item \textbf{Robustezza e stabilità}: comportamento corretto in condizioni inusuali (guasti
+            hardware/software) e mai viste prima, reagendo in modo opportuno a congestioni;
+            \item \textbf{Imparzialità}: la strada scelta non deve intenzionalmente avvantaggiare alcun nodo;
+            \item \textbf{Ottimalità}: riduzione al minimo possibile del ritardo medio dei pacchetti,
+            massimizzazione delle capacità di carico totale della rete (anche se molto spesso questi
+            due obiettivi sono in conflitto ed occorre scendere a compromessi).
+        \end{itemize}
+        
+        A seconda della tipologia di algoritmo scelto, il routing si distingue in \textbf{tre classi principali}:
+
+        \begin{itemize}
+            \item \textbf{Minimale}: le decisioni sono tutte definite al momento della configurazione
+            dell’interfaccia di rete;
+            \item \textbf{Statico}: utilizza algoritmi \textbf{non adattivi}, ovvero che non basano le loro decisioni su
+            misure o stime del traffico e della topologia corrente. Il percorso utilizzato per collegare
+            due nodi è calcolato in anticipo, in modalità offline, ed è scaricato nei router all’avvio
+            della rete;
+            \item \textbf{Dinamico}: utilizza algoritmi \textbf{adattivi}, che cambiano le loro decisioni secondo le
+            modifiche apportate alla topologia e di solito anche al traffico.
+        \end{itemize}
+
+        Uno stato importante per gli algoritmi di routing è lo stato di \textbf{convergenza}: diremo che un set
+        di router sono in uno stato di convergenza, se le informazioni topologiche riguardo la
+        internetwork dove operano è la medesima. Analizzare quanto velocemente un algoritmo di
+        routing raggiunge la convergenza è molto utilizzato come metro di paragone.
+
+            \subsubsection{Routing table}
+            Una \textbf{routing table} (o \textbf{tabella di routing}) è un database memorizzato in un router o in un host
+            che elenca i vari \textbf{next hop} (\textbf{prossimo salto}, il prossimo nodo da attraversare) a cui può andare
+            un pacchetto. Quindi nella tabella di routing, ogni riga corrisponde ad una possibile strada, i cui
+            elementi essenziali sono:
+            
+            \begin{itemize}
+                \item \textbf{ID di rete}: l’indirizzo dell’host o sottorete di destinazione;
+                \item \textbf{Next hop}: indirizzo dell’eventuale prossimo gateway da attraversare;
+                \item \textbf{Costo/metrica}: il costo o metrica del percorso. Questa unità di misura viene detta
+                \textbf{metric} e non è univocamente definibile: può assumere infatti diversi significati:
+                    \begin{itemize}
+                        \item \textbf{Path Length (o hop-count)}: numero di nodi da attraversare;
+                        \item \textbf{Reliability}: l’affidabilità di una rete misurata ad intervalli costanti;
+                        \item \textbf{Delay}: il tempo necessario ad ogni pacchetto per raggiungere la destinazione;
+                        \item \textbf{Bandwidth}: l’ampiezza di banda;
+                        \item \textbf{Load}: traffico misurato ad intervalli regolari;
+                        \item \textbf{Communication Cost}: numero intero arbitrario che indica quanto un percorso
+                        sia conveniente: valori più bassi indicano un percorso migliore.
+                    \end{itemize}
+            \end{itemize}
+
+            Le routing table possono ricevere informazioni da due sorgenti:
+
+            \begin{itemize}
+                \item Dal \textbf{file di configurazione} creato dall’amministratore di rete, salvato sul disco del
+                dispositivo e interpretato in fase di inizializzazione dell’hardware;
+                \item Da \textbf{protocolli dinamici di aggiornamento} (protocolli di routing).
+            \end{itemize}
+
+            Alla ricezione di un pacchetto, ogni nodo della rete controlla la classe dell’indirizzo IP o
+            sottorete di destinazione:
+
+            \begin{itemize}
+                \item se l’indirizzo \textbf{è locale}, allora applica la subnet mask alla destinazione e invia
+                direttamente all’host destinatario;
+                \item se invece \textbf{non è locale}, allora cerca nella routing table la rete di destinazione e instrada
+                il datagram verso il gateway corrispondente.
+            \end{itemize}
+
+            In ambiente \textbf{Unix}, il comando per visualizzare la tabella di routing è: \textbf{`netstat -r`}.
+            Opzionalmente, è possibile usare la specifica -n per ottenere gli indirizzi di destinazione in
+            forma numerica. Per ogni risultato può comparire un campo flag, i cui significati sono i seguenti:
+
+            \begin{itemize}
+                \item \textbf{U}: indica che l’interfaccia di rete è attiva (infatti U sta per UP);
+                \item \textbf{G}: indica un’uscita verso un’altra rete tramite gateway;
+                \item \textbf{H}: indica che la destinazione è l’indirizzo completo di un host;
+                \item \textbf{D}: indica una route aggiunta da un ICMP redirect.
+            \end{itemize}
+            
+            \subsubsection{Routing in una intranetwork}
+            Il routing attraverso una internetwork è simile al routing eseguito in una singola sottorete, ma
+            con alcune complicazioni in più. Il routing viene infatti effettuato a due livelli:
+
+            \begin{itemize}
+                \item dentro ogni rete viene utilizzato un protocollo di gateway interno
+                (\textbf{IGP}: Interior Gateway Protocol);
+                \item tra le reti è adottato un protocollo di gateway esterno (\textbf{EGP}: Exterior Gateway Protocol).
+            \end{itemize}
+
+            Esiste inoltre un’altra famiglia di protocolli di routing, che non rientra né in quella IGP né in
+            quella EGP, ed è la \textbf{CIDR (Classless Inter-Domain Routing)}.\\
+
+            Poiché ciascuna rete è indipendente, ognuna può usare algoritmi differenti e a forte di questa
+            loro indipendenza, un gruppo di router e reti sotto il controllo di una singola autorità
+            amministrativa ben definita, viene chiamato \textbf{Autonomous System (AS)}. Ogni AS ha un numero
+            identificativo univoco, detto \textbf{ASN (Autonomous System Number)}, utile ai fini del routing. Gli
+            ASN sono assegnati da ICANN ai Regional Internet Registries (RIRs).\\
+            
+            Gli AS possono essere suddivisi in:
+
+            \begin{itemize}
+                \item \textbf{multihomed autonomous system}: è un AS che mantiene connessioni con più di un AS;
+                \item \textbf{stub autonomous system}: si riferisce ad un AS connesso solamente con un altro AS;
+                \item \textbf{transit autonomous system}: è un AS che fornisce attraverso di sé connessioni con altre
+                reti
+            \end{itemize}
+
+        \subsection{Classificazione di algoritmi adattivi}
+        Le moderne reti di computer generalmente utilizzano algoritmi di routing dinamici al posto di
+        quelli statici, poiché gli algoritmi statici non tengono conto del carico istantaneo della rete.
+        I due algoritmi dinamici più popolari sono il routing basato sul vettore delle distanze e il routing
+        basato sullo stato dei collegamenti.
+
+        \subsection{Algoritmi di tipo distance-vector (vettore-distanza)}
+        Gli algoritmi di routing basati sul \textbf{vettore delle distanze} (distance vector routing) operano
+        facendo in modo che ogni router conservi una tabella (ossia un \underline{vettore}), che definisce la
+        migliore \underline{distanza} conosciuta per ogni destinazione e la linea che conduce a tale destinazione.
+        Queste tabelle sono aggiornate scambiando informazioni con i router vicini, e gli aggiornamenti
+        sono in forma di coppie del tipo \textbf{(rete di destinazione, distanza)}, dove la metrica usata per la
+        distanza potrebbe essere il numero di salti, il ritardo espresso in millisecondi, il numero totale
+        di pacchetti accodati lungo il percorso o qualcosa di simile.
+
+        \subsection{Algoritmi di tipo link-state (stato dei collegamenti)}
+        Il routing basato sul vettore delle distanze è stato utilizzato in ARPANET fino al 1979, quando
+        fu sostituito dal routing basato sullo \textbf{stato dei collegamenti}, ancora largamente usato in
+        diverse varianti. L’idea alla base di questo algoritmo è semplice e può essere riassunta in cinque
+        punti. Ogni router deve:
+
+        \begin{enumerate}
+            \item scoprire i propri vicini e i relativi indirizzi di rete;
+            \item misurare il ritardo (delay) o il costo di ogni vicino;
+            \item costruire un pacchetto detto link-state che contiene tutte le informazioni raccolte;
+            \item inviare questo pacchetto a tutti gli altri router;
+            \item elaborare il percorso più breve verso tutti gli altri router.
+        \end{enumerate}
+
+        In pratica, si misurano sperimentalmente la topologia completa e tutti i ritardi per poi
+        distribuirli a ogni router; successivamente viene eseguito l’algoritmo di Dijkstra per trovare il
+        percorso più breve associato a ogni altro router.\\
+        
+        Questo tipo di routing permette di effettuare calcolo distribuito (ogni router lavora), evita i
+        problemi che si hanno quando un router trasmette informazioni errate e può gestire reti
+        composte da un gran numero di nodi
+
+        \subsection{OSPF}
+        Sviluppato nel 1988 da un sottogruppo di IEFT (Internet Engineering Task Force), \textbf{OSPF (Open
+        Shortest Path First)} è oggi supportato dalla maggior parte dei produttori di router ed è
+        diventato il principale protocollo di \textbf{routing per gateway interni}.\\
+        
+        Si tratta di un protocollo aperto (\textbf{Open}, senza vincoli di brevetto) che soddisfa alcuni requisiti:
+        
+        \begin{itemize}
+            \item supporta \textbf{diverse metriche di distanza} (come la distanza fisica, il ritardo...);
+            \item è un algoritmo \textbf{dinamico}, in grado di modificarsi rapidamente e automaticamente in
+            base alla topologia;
+            \item è stato realizzato come supporto al \textbf{routing basato sul tipo di servizio} (ottenibile dal
+            campo Type of Service di IP), ma a causa del suo scarso utilizzo (in sua assenza gli utenti
+            avevano già trovato altre soluzioni), si è deciso di eliminarlo in quanto superfluo;
+            \item esegue il \textbf{bilanciamento del carico}, ossia suddividere il carico su più linee: la maggior
+            parte dei protocolli precedenti inviava tutti i pacchetti lungo il percorso migliore ed il
+            percorso successivo al migliore non era mai utilizzato;
+            \item supporta i \textbf{sistemi gerarchici (aree)}, in quanto prima nessun router poteva (né
+            doveva) conoscere l’intera topologia di Internet, a causa della sua dimensione elevata e
+            crescente;
+            \item supporta l’\textbf{autenticazione dei messaggi}, migliorando la sicurezza ed impedendo agli
+            utenti di imbrogliare i router inviando loro false informazioni di routing.
+        \end{itemize}
+
+        OSPF opera rappresentando la \textbf{rete reale come un grafo} e poi elabora il \textbf{percorso più breve}
+        da ogni router a ogni altro router, in base al costo degli archi (distanza, ritardo e così via).\\
+        
+        Siccome molti AS di Internet sono a loro volta grandi e difficili da gestire, OSPF permette di
+        dividere tali AS in più \textbf{aree}, dove ogni area è una rete o un insieme di reti contigue. Ogni router
+        conserva il \textbf{topological database} della sua area, ovvero una lista dei router adiacenti,
+        indicando quelli designati a svolgere il ruolo di “rappresentanti dell’area”, cioè \textbf{DR (Designated
+        Routers)} e \textbf{BDR (Backup Designated Routers)}. Ogni AS ha un’area dorsale chiamata
+        \textbf{backbone area} o \textbf{area 0} e tutte le aree sono collegate alla dorsale, il che permette di passare
+        da un’area a qualunque altra dello stesso AS attraverso la backbone.
+        I router della stessa area hanno lo stesso topological database, e la divisione in aree permette
+        di ridurre il traffico di routing. L’OSPF backbone distribuisce le informazioni di routing tra le
+        aree e ne può apprendere ulteriori mediante istruzioni di configurazione o tramite EGP o IGP.\\
+
+        La divisione in aree porta a 2 tipi diversi di routing (\textbf{intra-area} ed \textbf{inter-area}) e a 4 diversi tipi
+        di router:
+        
+        \begin{itemize}
+            \item \textbf{IR (Internal Router)}: router completamente interno ad un’area;
+            \item \textbf{ABR (Area Border Router)}: collegano due o più aree, mantengono il topological
+            database di ogni area che collegano;
+            \item \textbf{BR (Backbone Router)}: router dell’area di backbone;
+            \item \textbf{ASBR (AS Boundary Router)}: comunicano con i router che si trovano in altri AS.
+        \end{itemize}
+        
+        OSPF è un protocollo \textbf{intra-AS (IGP)} (anche se può funzionare tra diversi AS) e \textbf{link-state},
+        poiché invia \textbf{link-state advertisements (LSA)} a tutti i router della stessa area per diffondere
+        informazioni sulle interfacce attive, sulle metric e altre informazioni.\\
+        
+        I \textbf{pacchetti di tipo LSA} di OSPF si dividono in \textbf{5 tipi}:
+        
+        \begin{itemize}
+            \item \textbf{Hello}: usato per scoprire chi sono i vicini;
+            \item \textbf{Database Description}: fornisce i propri criteri per la selezione del costo del link;
+            \item \textbf{Link State Request}: richiesta di informazioni di stato ai router vicini;
+            \item \textbf{Link State Update}: comunica i costi utilizzati nel database della topologia;
+            \item \textbf{Link State Acknowledgement}: conferma un Link State Update.
+        \end{itemize}
+        
+        \subsection{RIP}
+        \textbf{RIP (Routing Information Protocol)} è un popolare algoritmo di routing che utilizza UDP come
+        protocollo di trasporto (porta 520) e si basa sull’algoritmo vettore-distanza utilizzando il
+        numero di hop come metric.\\
+        
+        RIP presenta un \textbf{limite di 15 hop}: reti più lontane di 15 hop (indicate con 16 hop) sono
+        considerate irraggiungibili e considerate aventi metrica infinita. Nonostante ciò, non riesce ad
+        evitare i routing loop. Questi sono alcuni dei motivi che hanno portato all’utilizzo ridotto di RIP,
+        oltre al fatto che converge più lentamente rispetto ad altri algoritmi come OSPF e non supporta
+        subnet variabili. RIP è più leggero di OSPF (richiede meno risorse) ed è disponibile per default
+        sui sistemi Unix/Linux (daemon \textbf{`routed`}).\\
+        
+        Il funzionamento di RIP è semplice: i router che lo implementano, inviano tutta la routing table
+        o parte di essa ai router vicini ad intervalli di tempo regolari, dopodiché ogni router si tiene
+        solo le informazioni relative alle best routes. Il RIP ha due forme a seconda dell’utente:\\
+        
+            \begin{itemize}
+                \item Forma \textbf{passiva}: usata dagli host, riceve messaggi ma non ne invia;
+                \item Forma \textbf{attiva}: usata dai router, riceve ed invia in broadcast messaggi.
+            \end{itemize}
+        
+        Questi messaggi prendono il nome di \textbf{routing updates} e consistono in una porzione della
+        routing table in cui si è trovato un percorso migliore. Gli aggiornamenti vengono inviati in due
+        occasioni:
+        
+            \begin{itemize}
+                \item Ad ogni tick del routing-update timer, cioè \textbf{a cadenza regolare} (di default 30 secondi);
+                \item Quando \textbf{cambia la topologia} della rete dei router confinanti.
+            \end{itemize}
+            
+        Un altro timer utilizzato è il \textbf{route timeout}: se una route non viene aggiornata nella tabella
+        entro un tempo limite, viene segnata come non valida e successivamente rimossa allo scadere
+        del \textbf{route-flush} timer.\\
+
+        Per evitare di annunciare false informazioni di routing, RIP implementa alcune tecniche:
+
+            \begin{itemize}
+                \item \textbf{Split horizon}: il router non propaga informazioni su una route al router che ha generato
+                tale aggiornamento;
+                \item \textbf{Hold down}: costringe un router a ignorare aggiornamenti inerenti a una rete per un
+                certo tempo (60 sec. in genere), dopo aver ricevuto un messaggio di rete irraggiungibile;
+                \item \textbf{Poison reverse}: quando un collegamento scompare, il router che effettuava l’annuncio
+                continua ad annunciarlo ancora per un certo tempo, assegnandoli distanza infinita
+            \end{itemize}
+
+        \subsection{BGP}
+        Dentro un singolo AS, il protocollo di routing raccomandato è OSPF (sebbene non sia l’unico
+        utilizzato). Tra AS si utilizza un protocollo diverso, chiamato \textbf{BGP (Border Gateway Protocol)},
+        perché gli obiettivi sono differenti: un protocollo per gateway interni non deve far altro che
+        spostare i pacchetti nel modo più efficiente possibile dalla sorgente alla destinazione; non deve
+        preoccuparsi della \textbf{politica}, ovvero vincoli che si possono imporre. Alcuni esempi di vincoli:
+        
+            \begin{itemize}
+                \item Nessun traffico di passaggio attraverso certi AS;
+                \item Mai mettere l’Iraq su un percorso che inizia dal Pentagono;
+                \item Passare per l’Albania solo se non esistono alternative per la destinazione.
+            \end{itemize}
+
+        In genere i criteri sono configurati manualmente in ogni router BGP (o inseriti usando qualche
+        tipo di script), e non fanno parte del protocollo stesso.\\
+
+        Dato l’interesse di BGP verso il traffico di passaggio, le reti sono raggruppate in 3 categorie:
+
+            \begin{itemize}
+                \item \textbf{Stub networks (reti terminali)}: sono reti che non possono essere utilizzate per il
+                traffico di passaggio perché non ci sono altre reti a cui si collega;
+                \item \textbf{Multiconnected networks (reti multicollegate)}: reti utilizzate per il traffico di
+                passaggio, se non rifiutano di farlo;
+                \item \textbf{Transit networks (reti di transito)}: simili alle reti backbone nell’OSPF, sono reti
+                pronte a gestire pacchetti di terze parti, di solito con alcune restrizioni o a pagamento.
+            \end{itemize}
+
+
+        BGP effettua \textbf{interdomain routing (EGP)} basandosi su un algoritmo \textbf{vettore-distanza} (un po’
+        diverso da quello applicato ad altri protocolli) e utilizzando connessioni TCP (porta 179), che
+        rende le comunicazioni affidabili e nasconde tutti i dettagli della rete attraversata.\\
+        
+
+        Infatti, l’algoritmo \textbf{vettore-distanza} utilizzato in BGP è stato \textbf{modificato} in modo da tenere
+        traccia anche del percorso utilizzato, anziché solo il costo di ogni destinazione. Inoltre, anziché
+        comunicare periodicamente a ogni vicino il costo stimato associato a ogni possibile
+        destinazione, ogni router BGP comunica l’esatto percorso in uso e basta. Ogni router BGP
+        contiene un modulo che esamina i percorsi diretti a una destinazione e assegna loro un
+        punteggio (distanza associata a quella destinazione) e nel caso un percorso violi un criterio di
+        vincolo riceve punteggio $\infty$. Tuttavia la funzione che valuta il punteggio dei percorsi non fa
+        parte del protocollo BGP e può essere scelta dagli amministratori del sistema.\\
+
+        I peer che eseguono il protocollo BGP eseguono 3 funzioni di base:
+
+            \begin{itemize}
+                \item \textbf{Autenticazione reciproca}, per stabilire la correttezza delle operazioni e vedere se è
+                possibile comunicare;
+                \item \textbf{Scambio di informazioni}, come le reti raggiungibili (e non) o dati del salto successivo;
+                \item \textbf{Funzioni di verifica}, per controllare la correttezza dei peer e della connessione di rete.
+            \end{itemize}
+
+
+        Per definire queste 3 funzioni, BGP definisce un insieme di 5 messaggi:
+
+            \begin{itemize}
+                \item \textbf{Open}: primo messaggio inviato da ciascuna parte dopo l’attivazione della sessione TCP,
+                serve ad aprire una sessione tra peer. Deve essere confermato da un messaggio
+                keepalive prima che possa aver luogo la comunicazione;
+                \item \textbf{Update}: aggiornamento del routing, consente al router di avere una mappa della rete ed
+                eventualmente cancellare reti irraggiungibili;
+                \item \textbf{Notification}: inviato in condizione di errore, chiude una sessione attiva e avvisa i router
+                vicini del motivo della chiusura;
+                \item \textbf{Keepalive}: messaggi di servizio inviati regolarmente per mantenere la connessione;
+                \item \textbf{Refresh}: chiede il reinvio delle informazioni di routing per una rete da parte di un peer.
+            \end{itemize}
+
+                
+        Il protocollo BGP può essere utilizzato in 3 differenti scenari:
+
+            \begin{itemize}
+                \item \textbf{Inter-Autonomous System Routing (eBGP)}: routing tra 2 o più router BGP di AS
+                diversi;
+                \item \textbf{Intra-Autonomous System Routing (iBGP)}: routing tra 2 o più router BGP di uno
+                stesso AS;
+                \item \textbf{Pass-through Autonomous System Routing}: routing tra 2 o più router BGP che
+                scambiano traffico attraverso un AS che non esegue BGP.
+            \end{itemize}

@@ -1,0 +1,505 @@
+\section{Le Architetture di Rete}
+    Esistono due importanti architetture di rete: il modello di riferimento \textbf{OSI} e il modello \textbf{TCP/IP}.
+    Anche se i protocolli associati al modello OSI ormai sono in disuso, il modello in sé ha valore
+    generale ed è ancora valido, e le caratteristiche discusse per ogni livello sono ancora molto
+    importanti. Il modello TCP/IP ha caratteristiche opposte: il modello in sé è poco utilizzabile, ma
+    i protocolli sono largamente impiegati; per questo motivo vanno esaminati entrambi in
+    dettaglio. A volte s’impara più dai fallimenti che dai successi.
+    
+    \begin{tabular}{ll}
+        \textit{OSI} & \textit{TCP/IP} \\
+        \begin{tabular}{|c|c|}
+            \hline
+            \textbf{Livello 7} & Applicazione \\
+            \hline
+            \textbf{Livello 6} & Presentazione \\
+            \hline
+            \textbf{Livello 5} & Sessione \\
+            \hline
+            \textbf{Livello 4} & Trasporto \\
+            \hline
+            \textbf{Livello 3} & Rete \\
+            \hline
+            \textbf{Livello 2} & DataLink \\
+            \hline
+            \textbf{Livello 1} & Fisico \\
+            \hline
+        \end{tabular} 
+        &
+        \begin{tabular}{|c|}
+            \hline
+            Applicazione \\
+            \hline
+            Presentazione \\
+            \hline
+            (non presente) \\
+            \hline
+            (non presente) \\
+            \hline
+            Trasporto \\
+            \hline
+            Internet \\
+            \hline
+            Host-to-network \\
+            \hline
+        \end{tabular}
+    \end{tabular}
+
+        \subsection{Il modello di riferimento ISO/OSI}
+        L’ISO (International Standards Organization) è un organo consulente dell’ONU, che promuove
+        lo sviluppo di standardizzazioni nel mondo. È il creatore dell’\textbf{OSI (Open Systems
+        Interconnections)}, così chiamato perché riguarda la connessione di sistemi aperti, cioè sistemi
+        che sono “aperti” verso la comunicazione con altri. È uno standard \textbf{\textit{de jure}} ("per legge", ovvero
+        formale, adottato da qualche organismo di standardizzazione autorizzato, in questo caso ISO).
+        È caratterizzato da \textbf{7 livelli}: ogni livello sfrutta i servizi dei livelli inferiori. La comunicazione
+        tra livelli adiacenti avviene tramite i \textbf{NAP (Neutral Access Points)}, mentre la comunicazione
+        tra entità di livelli diversi avviene tramite il \textbf{SAP (Service Access Point)}. Le operazioni
+        specifiche di un livello sono realizzate tramite un insieme di protocolli. Di seguito una breve
+        descrizione di ogni livello:
+
+        \begin{itemize}
+            \item \textbf{Physical Layer}: si occupa della trasmissione di bit grezzi sul canale di comunicazione.
+                È l’insieme di regole che specificano le connessioni elettriche e fisiche tra i dispositivi. Definisce
+                la specifica dei cavi e del tipo di segnale elettrico associato ai vari pin.
+                
+            \item \textbf{Data Link Layer}: definisce l’accesso al mezzo specificato nel Physical Layer, il formato dei dati
+                ed è responsabile dell’invio affidabile delle informazioni, ovvero gestisce tra le altre cose la
+                frammentazione dei dati e le procedure di controllo di possibili errori del livello fisico.
+                Appartengono a questo livello i protocolli Data Link (DLCP, BSC, HDLC...), sono inoltre presenti
+                anche i sottolivelli LLC e MAC e hardware come Network Interface Card (NIC), Hub, Switch (di
+                livello 2) e Bridge.
+                
+            \item \textbf{Network Layer}: si occupa della connessione tra due nodi della rete (detti nodo sorgente e nodo
+                destinatario). Gestisce il routing e lo scambio di informazione tra i nodi. I servizi associati a
+                questo livello sono legati al movimento dei dati nella rete, inclusi l’indirizzamento, il routing e
+                le procedure di controllo dei flussi (vengono definite le raccomandazioni X.25 e X.75).
+                A questo livello appartiene il protocollo IP.
+                
+            \item \textbf{Transport Layer}: è il garante del trasferimento delle informazioni. Analizza il traffico fra i nodi
+                controllando gli errori, la sequenza e i fattori di affidabilità dello scambio.
+                A questo livello appartengono i protocolli TCP e UDP. È il primo livello \textbf{end-to-end}.
+                
+            \item \textbf{Session Layer}: regolarizza l’inizio e la fine dei flussi dei dati fra i nodi. Si occupa
+                dell’organizzazione del dialogo tra i programmi applicativi.
+                
+            \item \textbf{Presentation Layer}: si occupa di effettuare trasformazione sui dati compatibilmente con il
+                dispositivo di ricezione. Esempi di trasformazione riguardano crittografia e compressione.
+
+            \item \textbf{Application Layer}: è l’ultimo livello, comprende tutti i programmi applicativi che consentono
+                l’uso della rete: fa da interfaccia tra rete e utente. Esempi di funzioni svolte da questo livello
+                possono essere: terminale virtuale, trasferimento di file, posta elettronica, condivisione di
+                risorse e accesso a database.
+        \end{itemize}
+
+        \subsection{Il modello di riferimento TCP/IP}
+        Il \textbf{TCP/IP} è così chiamato per ricordare i suoi protocolli più importanti: il Transmission Control
+        Protocol (TCP) e l'Internet Protocol (IP). È uno standard \textbf{\textit{de facto}} ("dalla realtà", ovvero
+        stabilito senza piani formali). Di seguito una breve descrizione di ogni livello:
+        \begin{itemize}
+        
+            \item \textbf{Host-to-network Layer}: “il grande vuoto”, nel modello di riferimento TCP/IP non viene
+                specificato cosa accade in questo territorio, si limita a segnalare che l’host deve collegarsi alla
+                rete usando qualche protocollo che gli permetta di spedire pacchetti IP. Questo protocollo però
+                non è definito e varia da host a host.
+                
+            \item \textbf{Internet Layer}: il suo scopo è quello di consentire agli host di mandare pacchetti in qualsiasi
+                rete, e farli viaggiare in modo indipendente l’uno dall’altro fino alla destinazione (che magari è
+                su una rete diversa). È importante notare che viene definito il protocollo \textbf{IP}.
+            
+            \item \textbf{Transport Layer}: è progettato per consentire la comunicazione tra entità pari degli host
+                sorgente e destinazione, come nel livello trasporto OSI. Sono definiti due protocolli di trasporto
+                end-to-end: \textbf{TCP} e \textbf{UDP}.
+
+            \item \textbf{Application Layer}: nel modello TCP/IP non ci sono sessione e presentazione, poiché si è notato
+                che nella maggior parte dei casi sono inutili. Come nel modello OSI, il livello Applicazione
+                contiene un gran numero di programmi che si interfacciano con l’utente.
+        \end{itemize}
+
+    \section{Internet Protocol(IP)}
+    L’IP è la colla che tiene unito Internet. È il protocollo \textbf{connectionless e best effort} del livello 3
+    (Rete) e permette di interconnettere reti eterogenee: per questo è implementato sopra ai
+    protocolli di livello Data Link, svolgendo la funzione di routing (ovvero scegliere il percorso che
+    dovranno seguire i dati, spiegato in seguito).
+        
+        \subsection{Datagram IP}
+        Il pacchetto utilizzato dall’IP è detto \textbf{datagram IP} (per analogia con il servizio telegrafico,
+        telegram service) ed è costituita da una parte di intestazione (detta \textbf{header}) e da una parte di
+        testo (detta \textbf{data}). La versione attualmente utilizzata è la v4, anche se al momento è in corso
+        una transizione da IPv4 a IPv6, che ha avuto inizio anni fa e il cui completamento richiederà
+        ancora parecchio tempo (o addirittura mai). Di seguito viene analizzato l’header dell’IPv4.
+    
+            \subsubsection{IPv4}
+            L’intestazione ha una parte fissa di 20 byte e una parte opzionale di lunghezza variabile ed è
+            trasmessa in ordine \textit{big endian} (da sinistra a destra). Sulle macchine \textit{little endian} è necessario
+            eseguire una conversione software sia in ricezione che in trasmissione.\\
+           
+            \begin{tikzpicture}
+                \coordinate (A) at (-7,0);
+                \coordinate (B) at ( 7.8,0);
+                \draw[<->] (A) -- (B) node[midway,fill=white] {32 bit};
+            \end{tikzpicture}
+            
+            \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+                \hline
+                & & & & & & & & & & & & & & & & & & & & & & & & & & & & & & & \\
+                \hline
+                \multicolumn{32}{l}{} \\
+                \hline
+                \multicolumn{4}{|c|}{Version} & \multicolumn{4}{|c|}{IHL} & \multicolumn{6}{|c|}{Type of Service} & & & \multicolumn{16}{|l|}{Total Lenght}\\
+                \hline
+                \multicolumn{16}{|c|}{Identification} & & DF & MF & \multicolumn{13}{|c|}{Fragment Offset} \\
+                \hline
+                \multicolumn{8}{|c|}{Time to Live} & \multicolumn{8}{|c|}{Protocol} & \multicolumn{16}{|c|}{Header Checksum}\\
+                \hline
+                \multicolumn{32}{|c|}{Source address}\\
+                \hline
+                \multicolumn{32}{|c|}{Destination address}\\
+                \hline
+                \multicolumn{32}{|c|}{Opzioni (0 o più word)}\\
+                \hline
+            \end{tabular}
+
+            \begin{itemize}
+                \item \textbf{Version}: campo di 4 bit che indica la versione IP del datagram (attualmente IPv4);
+
+                \item \textbf{IHL (Internet Header Length)}: campo di 4 bit che indica la lunghezza dell’header
+                    espressa in parole da 32 bit. Necessario poiché, come anticipato, la lunghezza
+                    dell’intestazione non è costante;
+
+                \item \textbf{Type of Service}: campo di 8 bit che indica come deve essere gestito il datagram;
+
+                \item \textbf{Total Length}: campo lungo 16 bit che identifica la lunghezza totale del datagram;
+
+                \item \textbf{Identification, flag, offset}: controllano frammentazione e riassemblaggio del datagram;
+
+                \item \textbf{TTL (Time To Live)}: indica la durata in secondi concessa al datagram per restare in rete,
+                    evitando che un datagram giri a vuoto per sempre, evento che potrebbe accadere in caso
+                    di danneggiamento delle tabelle di routing;
+
+                \item \textbf{Protocol}: è un codice che identifica il protocollo utilizzato nel campo dati
+                    (intuitivamente, può essere associato all’estensione nel nominativo di un file);
+
+                \item \textbf{Header Checksum}: garantisce il controllo dell’integrità dell’header;
+
+                \item \textbf{Source address, Destination address}: rispettivamente indirizzo sorgente e indirizzo di
+                    destinazione, indicano il numero di rete e il numero di host, espressi tramite indirizzi IP;
+
+                \item \textbf{Options (opzioni)}: via di fuga per dare alle versioni successive del protocollo la
+                    possibilità d’includere informazioni non presenti nel progetto originale
+            \end{itemize}
+            
+            \subsubsection*{Indirizzo IPv4}
+            Un indirizzo IP (in entrambe le sue versioni) permette di identificare univocamente \textbf{la
+            connessione di un host alla rete}. L’indirizzo IPv4 è espresso con \textbf{32 bit}, è \textbf{diviso in 2 parti}
+            (rete ed host) ed è utilizzato nei campi Source address e Destination address dei pacchetti IP. È
+            importante notare che un indirizzo IP non si riferisce veramente a un host, ma a una \textbf{scheda di
+            rete}, perciò quando un host ha due schede di rete, deve avere due indirizzi IP. Comunque, la
+            maggior parte degli host ha un’unica scheda di rete e perciò ha un solo indirizzo IP.\\
+            
+            Un indirizzo IP si esprime in \textbf{notazione decimale a punti}, dove ognuno dei 4 byte è
+            rappresentato con un numero che varia tra 0 e 255, del tipo:
+            
+            \begin{center}
+                \textbf{\emph{x.y.z.w}}
+            \end{center}
+            Un indirizzo IP può essere:
+            \begin{itemize}
+                \item \textbf{Pubblico}: rilasciato dall’ICANN, indica un indirizzamento di rete destinato a reti \textbf{globali};
+                \item \textbf{Privato}: indica un indirizzamento di rete destinato a reti \textbf{locali};
+                \item \textbf{Statico}: l’IP dell’host \textbf{non varia} nel tempo;
+                \item \textbf{Dinamico}: l’IP dell’host \textbf{varia} nel tempo.
+            \end{itemize}
+            \subsubsection*{Come si ottiene un indirizzo IP?}
+            Un indirizzo IP può essere assegnato automaticamente utilizzando il servizio DHCP (Dynamic
+            Host Configuration Protocol) oppure in modo manuale.
+
+            \subsubsection*{Classificazione di Indirizzi IP}
+            Per molti decenni, gli indirizzi IP sono stati divisi in cinque categorie: A, B, C, D, E.
+            È bene notare che oggi il sistema non è più utilizzato poiché permetteva parecchi sprechi di
+            indirizzi IP, sempre più preziosi con l’aumentare della richiesta. Come approfondimento, il
+            nuovo sistema attualmente in uso è il \textbf{CIDR (Classless Inter-Domain Routing)}.\\
+            
+            %da inserire tabella classificazione indirizzi (pagina 16)%
+            \begin{tikzpicture}
+                \coordinate (A) at (-7,0);
+                \coordinate (B) at ( 5,0);
+                \draw[<->] (A) -- (B) node[midway,fill=white] {32 bit};
+            \end{tikzpicture}
+            
+            \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+                \hline
+                & & & & & & & & & & & & & & & & & & & & & & & & & & & & & & & \\
+                \hline
+                \multicolumn{32}{l}{} \\
+                \hline
+                0 & \multicolumn{7}{|c|}{Rete} & \multicolumn{24}{|c|}{Host} \\
+                \hline
+                \multicolumn{32}{l}{} \\
+                \hline
+                \multicolumn{2}{|c|}{10} & \multicolumn{14}{|c|}{Rete} & \multicolumn{16}{|c|}{Host} \\
+                \hline
+                \multicolumn{32}{l}{} \\
+                \hline
+                \multicolumn{3}{|c|}{110} & \multicolumn{21}{|c|}{Rete} & \multicolumn{8}{|c|}{Host} \\
+                \hline
+                \multicolumn{32}{l}{} \\
+                \hline
+                \multicolumn{4}{|c|}{1110} & \multicolumn{28}{|c|}{Indirizzi multicast} \\
+                \hline
+                \multicolumn{32}{l}{} \\
+                \hline
+                \multicolumn{4}{|c|}{1111} & \multicolumn{28}{|c|}{Riservati per usi futuri} \\
+                \hline
+            \end{tabular}\\
+            
+            A) Classe utilizzata per le \textbf{WAN} e le \textbf{MAN};\\
+            B) Classe utilizzata per le \textbf{MAN} e le \textbf{grosse LAN};\\
+            C) Classe utilizzata per le \textbf{LAN};\\
+            D) Classe utilizzata per gli \textbf{indirizzi multicast};\\
+            E) Classe non commerciale (riservata).
+
+            \subsubsection*{Indirizzi IP Speciali}
+            Esistono alcuni indirizzi IP che hanno un significato speciale. Uno schema di essi, è visibile nella
+            tabella sottostante.\\
+
+            %Inserire tabella degli indirizzi IP speciali (pagina 17)%
+            \begin{tabular}{ll}
+                \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+                    \hline
+                    \multicolumn{32}{|l|}{0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0} \\
+                    \hline
+                    \multicolumn{8}{|c|}{00 ... 00} & \multicolumn{24}{|c|}{Host} \\
+                    \hline
+                    \multicolumn{32}{|l|}{1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1} \\
+                    \hline
+                    \multicolumn{8}{|c|}{Rete} & \multicolumn{24}{|c|}{1111 ... 1111} \\
+                    \hline
+                    \multicolumn{3}{|c|}{127} & \multicolumn{29}{|c|}{(Qualsiasi cosa)} \\
+                    \hline
+                \end{tabular}
+                &
+                \begin{tabular}{l}
+                    Questo host\\
+                    Un host su questa rete\\
+                    Trasmissione broadcast sulla rete locale\\
+                    Trasmissione broadcast su rete distante\\
+                    Loopback\\
+                \end{tabular}
+            \end{tabular}\newline\newline
+
+            L’indirizzo IP \textbf{0.0.0.0} è utilizzato dagli host al momento del boot. Gli indirizzi IP di tipo C che
+            hanno lo \textbf{0 come numero di rete} si riferiscono alla rete corrente. Grazie a questi indirizzi, i
+            computer possono utilizzare la rete locale senza conoscerne il numero. L’indirizzo composto
+            da \textbf{tutti 1} permette la trasmissione broadcast sulla rete locale, in genere una LAN. Gli indirizzi
+            con \textbf{un numero di rete opportuno} e tutti 1 nel campo host, permettono ai computer l’invio di
+            pacchetti broadcast a reti LAN distanti collegate a Internet (però molti amministratori di rete
+            disattivano questa funzionalità). Infine, tutti gli indirizzi espressi nella forma \textbf{127.xx.yy.zz} sono
+            riservati per le prove di \underline{loopback}. I pacchetti diretti all’indirizzo di \underline{loopback} non sono immessi
+            nel cavo, ma elaborati localmente e trattati come pacchetti in arrivo.
+            
+            \subsubsection{Subnetting}
+            Può rivelarsi estremamente utile (come in casi in cui una singola rete acquisisce dimensioni
+            parecchio elevate) dividere internamente una rete in più parti, facendo in modo che il mondo
+            esterno veda ancora una singola rete. Questa pratica è chiamata \textbf{subnetting} e le parti della rete
+            sono chiamate \textbf{subnet (sottoreti)}.\\
+
+            Affinché un router implementi le sottoreti e sia in grado di riconoscere il numero di host
+            raggiungibili all’interno di ognuna, si definisce la \textbf{maschera di sottorete (subnet mask)}, un
+            numero che, preso un indirizzo IP, indica il punto di demarcazione tra i bit di rete e i bit di host.\\
+            
+            Come l'indirizzo IP, la subnet mask è un \textbf{numero a 32 bit} che si può indicare in notazione
+            decimale a punti oppure come un unico numero decimale, indicante il numero di bit della parte
+            di indirizzo della rete.\\
+            
+            Normalmente indirizzo IP e subnet mask sono accoppiati nella forma \textbf{a.b.c.d/m}, dove m è la
+            subnet mask in forma decimale, che è anche possibile ottenere in notazione decimale a punti:
+            basta infatti porre i primi m bit significativi di un numero a 32 bit pari a 1 ed i rimanenti pari a
+            0, per poi raggruppare in ottetti e convertire in decimale.\\
+
+            Effettuando l'AND logico bit a bit tra la subnet mask e l'indirizzo IP, si ottiene l'indirizzo IP della
+            sottorete.\\
+            
+            Si noti che effettuare subnetting, vuol dire conseguentemente \textbf{aumentare} i bit della parte \textbf{rete}
+            dell’indirizzo e \textbf{diminuire} i bit della parte \textbf{host}.
+
+            %Inserire tabella sbnetting (pagina 18)%
+
+            \subsubsection{Supernetting}
+            Analogamente, esiste il concetto di \textbf{supernetting}, che consiste nell’accorpare più reti fisiche
+            primarie diverse in un’unica rete. Fare supernetting può risultare utile, ad esempio, per
+            semplificare le informazioni di routing da trasmettere ai router.\\
+
+            Al contrario del subnetting, effettuare supernetting vuol dire conseguentemente \textbf{aumentare} i
+            bit della parte \textbf{host} dell’indirizzo e \textbf{diminuire} i bit della parte \textbf{rete}.
+            
+            \subsubsection{Piano di indirizzamento IP}
+            Il piano di indirizzamento IP è un documento che l’amministratore di rete deve scrivere e tenere
+            aggiornato per descrivere l’utilizzo del proprio spazio di indirizzamento IP.
+            
+            \subsubsection{IPv6}
+            L’IPv6 è la nuova versione di IP che non dovrebbe mai esaurire i suoi indirizzi IP, risolvere una
+            varietà di problemi in IPv4 ed essere più flessibile ed efficiente, permettendo quindi una reale
+            connettività globale, eliminando reti o host nascosti.\\
+            
+            Nello specifico, sono 4 i cambiamenti portati da questo nuovo standard:
+            \begin{itemize}
+                \item \textbf{Indirizzi da 16 byte} (128 bit), il che si traduce in una scorta praticamente illimitata di
+                indirizzi IP;
+                \item \textbf{Header semplificato} (7 campi contro 13 di IPv4), che permette di elaborare i pacchetti
+                più velocemente;
+                \item \textbf{Migliore supporto per le opzioni}, necessario poiché campi prima necessari ora sono
+                opzionali;
+                \item \textbf{Incremento della sicurezza}, migliorando autenticazione e riservatezza.                
+            \end{itemize}
+            Di seguito è descritta l’intestazione dell’IPv6.
+
+            %Inserire Tabella ipv6 (pag 19)%
+            
+            \begin{itemize}
+                \item \textbf{Version}: campo di 4 bit che indica la versione IP del datagram (che sarà sempre 6);
+                \item \textbf{Traffic class}: utilizzato per distinguere i pacchetti con diversi requisiti di distribuzione
+                in tempo reale (simile a Type of Service di IPv4);
+                \item \textbf{Flow label}: sebbene il suo utilizzo non sia ancora chiaro, consentirebbe a una sorgente e
+                a una destinazione di impostare una pseudo-connessione con particolari proprietà e
+                requisiti;
+                \item \textbf{Payload length (lunghezza del carico utile)}: numero di byte del campo data;
+                \item \textbf{Next header}: è il segreto con cui è stato possibile semplificare l’header dell’IPv4.
+                Permette di indicare header estesi (opzionali) che seguono l’intestazione corrente. Se
+                però l’intestazione corrente è l’ultima intestazione IP, il campo next header indica il
+                gestore del protocollo di trasporto TCP o UDP al quale va passato il pacchetto (come il
+                campo Protocol dell’IPv4);
+                \item \textbf{Source address e Destination address}: come in IPv4, indicano l’indirizzo IP sorgente e
+                l’indirizzo IP di destinazione.
+                
+            \end{itemize}
+            Si noti che i campi riguardanti la frammentazione in IPv6 non sono più presenti, poiché IPv6
+            la gestisce in maniera diversa, così come il campo checksum è stato eliminato, perché
+            l’elaborazione di questa informazione riduceva enormemente le prestazioni, che con le reti
+            sempre più affidabili odierne, risulta quasi totalmente superfluo.
+
+            \subsubsection*{Header estesi IPv6}
+            Come accennato prima, IPv6 implementa il concetto di header. Alcuni dei campi mancanti di
+            IPv4 sono ancora saltuariamente necessari, perciò IPv6 ha introdotto il concetto di intestazione
+            estesa (opzionale), chiamata anche extension header. Queste intestazioni possono essere
+            fornite per offrire informazioni aggiuntive, codificate in modo efficiente. Al momento sono
+            definiti sei tipi di intestazioni estese:
+
+            \begin{itemize}
+                \item \textbf{Hop-by-hop}: utilizzata per le informazioni che tutti i router lungo il percorso devono
+                esaminare.
+                \item \textbf{Destination options}: utilizzata dai campi che devono essere interpretati dall’host di
+                destinazione;
+                \item \textbf{Routing}: elenca uno o più router che devono essere visitati lungo la strada;
+                \item \textbf{Fragment}: si occupa delle informazioni di frammentazione proprio come fa IPv4;
+                \item \textbf{Authentication}: fornisce un meccanismo che garantisce al ricevente di un pacchetto
+                l’autenticità del mittente;
+                \item \textbf{Encapsulating Security Payload}: permette di proteggere con la crittografia il
+                contenuto del pacchetto in modo da renderlo leggibile solo ai destinatari desiderati.
+            \end{itemize}
+            
+            \subsubsection*{Indirizzi IPv6}
+            Gli indirizzi IPv6 ovviamente svolgono ancora la stessa funzione degli indirizzi IPv4. Ciò
+            nonostante, avendo ora a disposizione 128 bit per essere rappresentati, la loro definizione va
+            rivista. Per scrivere gli indirizzi a 16 byte è stata escogitata una nuova notazione. Gli indirizzi
+            sono scritti come otto gruppi di quattro cifre esadecimali separate da due punti:
+            \begin{center}
+                \textbf{a:b:c:d:e:f:g:h}
+            \end{center}
+            Sono ammesse alcune scritture facilitate:
+            \begin{itemize}
+                \item È possibile omettere gli zero iniziali di un gruppo, ad esempio 0123 -> 123;
+                \item Uno o più gruppi contenenti 16 bit a zero possono essere sostituiti da due punti, ma ciò
+                è concesso solo una volta ad indirizzo. Ad esempio:
+                \underline{8000:0000:0000:0000:0123:4567:89AB:CDEF} $\rightarrow$ \underline{8000::123:4567:89AB:CDEF};
+            \end{itemize}
+
+            Inoltre, gli indirizzi IPv4 possono essere scritti in notazione decimale a punti dopo una coppia
+            di due punti, ad esempio \underline{::192.31.20.46}.\\
+
+            Per quanto riguarda la scrittura di un indirizzo IPv6 in un URL, esso deve essere scritto fra
+            parentesi quadre. Ad esempio: \url{http://[2001:1:4F3A::206:AE14]:8888/index.html}
+            
+            \subsubsection*{Tipi di indirizzi IPv6}
+            Gli indirizzi IPv6 possono essere di vario tipo: \textbf{Unicast, Multicast, Anycast}.
+            
+            \subsubsection*{Unicast}
+            Uno a uno: è un indirizzo IP che identifica una sola interfaccia di rete e quindi un unico
+            destinatario. L’indirizzo IPv6 unicast è diviso in 2 parti: i primi 64 bit identificano il prefisso di
+            rete e vengono detti \textbf{Subnet Prefix}, i restanti 64 identificano l’host e vengono detti quindi \textbf{Host
+            Identifier}. Gli indirizzi di tipo unicast possono essere:
+            \begin{itemize}
+                \item \textbf{Unspecified}: assenza di indirizzo, può essere usato nella richiesta iniziale DHCP per
+                ottenere un indirizzo (formato: 0:0:0:0:0:0:0:0 oppure ::);
+                \item \textbf{Loopback}: identifica l’host stesso, equivalente del 127.0.0.0 in IPv4
+                (formato: 0:0:0:0:0:0:0:1 oppure ::1); Per controllare se lo stack IPv6 funziona, è
+                possibile eseguire infatti il comando `ping6 ::1`;
+                \item \textbf{Link Local}: è uno scoped address, una novità di IPv6, ovvero un indirizzo di rete che è
+                valido solo per la comunicazione all’interno di un segmento di rete (link).
+                Fornisce ad ogni nodo un indirizzo IPv6 per iniziare le comunicazioni
+                (formato: FE80:0:0:0:<interface identifier>);
+                \item \textbf{Site Local}: è anch’esso uno scoped address, in questo caso l’ambito dell’indirizzo è un
+                \textbf{site} (una rete di link). Non è configurato di default e può essere utilizzato per
+                l’indirizzamento privato (format: FEC0:0:0:<subnet id>:<interface id>).                
+            \end{itemize}
+            
+            \subsubsection*{Multicast}
+            Uno a molti: è un indirizzo IP che identifica un insieme di interfacce di rete e quindi un insieme
+            di destinatari. Si noti che \underline{non esiste il broadcast in IPv6}, ed al suo posto si usa il multicast. Il suo
+            formato è FF<flags><scope>::<multicast group>, dove flag può essere 0 (permanente) o 1
+            (temporaneo).
+
+            \subsubsection*{Anycast}
+            Uno al più vicino: un indirizzo IPv6 anycast è un indirizzo che può corrispondere a un insieme
+            di interfacce di rete. Serve per le funzioni di discovery e non sono distinguibili dagli indirizzi
+            unicast.
+            
+        \subsection{Configurazione IP}
+        Un host IP può essere configurato automaticamente o staticamente. Della configurazione
+        automatica se ne occupa il protocollo \textbf{DHCP (Dynamic Host Configuration protocol)} che,
+        oltre a semplificare la fase di configurazione, permette una gestione facilitata della rete: di fatti
+        così facendo è possibile cambiare gli indirizzi IP e/o i parametri di configurazione senza
+        intervenire sui client, il che torna molto utile nel caso di grandi organizzazioni. Il suo
+        funzionamento viene analizzato nei capitoli successivi.
+        Per la configurazione statica, occorre specificare le seguenti entità:
+        \begin{itemize}
+            \item \textbf{Indirizzo IP};
+            \item \textbf{Subnet Mask};
+            \item \textbf{Default gateway};
+            \item Eventualmente \textbf{Indirizzo IP del nameserver} (vedi DNS).
+        \end{itemize}       
+
+        \subsection{Internet Multicasting}
+        La normale comunicazione IP avviene tra un trasmittente e un ricevente, ma per alcune
+        applicazioni è utile che un processo possa comunicare contemporaneamente con un gran
+        numero di ricevitori. Si pensi banalmente alla gestione di video-conferenze digitali.\\
+        
+        IP supporta la trasmissione \textbf{multicast}, in particolare IPv4 lo implementa con gli indirizzi di
+        classe D. Ogni indirizzo di classe D identifica un gruppo di host e 28 bit sono utilizzati per
+        identificare i gruppi. Il tentativo che viene fatto per trasmettere i dati ai membri del gruppo è
+        di tipo \textbf{best-effort}.\\
+        
+        In un gruppo, gli host possono cambiare dinamicamente, ovvero possono aggiungersi o uscire
+        dal gruppo senza limitazioni, ed è possibile definire una chiave di accesso.\\
+
+        Sono supportati due tipi di indirizzi di gruppo: \textbf{permanenti} e \textbf{temporanei}.\\
+        
+        Un gruppo \textbf{permanente} è sempre presente, non deve essere impostato e possiede un indirizzo
+        di gruppo permanente, mentre un gruppo \textbf{temporaneo} deve essere creato prima di poter
+        essere utilizzato, mediante entità specializzate chiamate \textbf{multicast agents}. Oltre a provvedere
+        alla creazione di nuovi gruppi, i multicast agents sono responsabili dell’invio in Internet dei
+        datagram multicast, nel caso un host sia in una rete diversa rispetto a quella degli altri host.
+
+            \subsubsection*{IGMP}
+            Circa una volta al minuto, ogni router multicast genera una trasmissione hardware multicast
+            (sul livello data link) diretta agli host sulla sua LAN (indirizzo 224.0.0.1) che chiede alle
+            macchine di indicare i gruppi di appartenenza dei loro processi. Ogni host risponde
+            comunicando tutti gli indirizzi di classe D che gli interessano.\\
+            
+            Questi pacchetti di interrogazione e risposta utilizzano un protocollo chiamato \textbf{IGMP (Internet
+            Group Management Protocol)}, descritto nel documento RFC 1112. Come intuibile, ha solo due
+            tipi di pacchetti: interrogazione e risposta, ognuno con un formato semplice prefissato, che
+            contiene alcune informazioni di controllo nella prima word del campo carico utile e un indirizzo
+            di classe D nella seconda word.\\
+            
+            Come piccola curiosità, il routing multicast è realizzato mediante le strutture spanning tree.
+            
