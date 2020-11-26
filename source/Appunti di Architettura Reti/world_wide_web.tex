@@ -40,13 +40,11 @@
     Una \textbf{HTTP request} (richiesta HTTP) è composta da:
 
         \begin{itemize}
-            \item \textbf{Request line}: singola stringa composta da un metodo (\textbf{GET, POST, HEAD, PUT,
-            DELETE, TRACE, OPTIONS} o \textbf{CONNECT}), un URL e la versione del protocollo.
-            Un esempio è: GET url_del_file HTTP/1.1;
+            \item \textbf{Request line}: singola stringa composta da un metodo (\textbf{GET, POST, HEAD, PUT, DELETE, TRACE, OPTIONS}
+            o \textbf{CONNECT}), un URL e la versione del protocollo.
+            Un esempio è: $GET url_del_file HTTP/1.1$;
             \item \textbf{Header}: una o più stringhe contenenti ulteriori informazioni, seguiti da una riga vuota.
-            Tra i più comuni vi sono:
-
-            \begin{itemize}
+            Tra i più comuni vi sono: \begin{itemize}
                 \item \textbf{Host}: indica il nome del server a cui si riferisce l’URL;
                 \item \textbf{User-agent}: identifica il tipo di client: tipo di browser, versione, ecc.;
                 \item \textbf{Cookie}: utilizzati dalle applicazioni web per archiviare e recuperare
