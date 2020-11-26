@@ -1,76 +1,76 @@
 \section{Definizioni Geneerali}
-        \subsection{Rete}
+    \subsection{Rete}
         Una \textbf{rete} è un insieme di dispositivi collegati in modo da permettere lo scambio di dati e la
         comunicazione tra più utenti. I dati vengono trasferiti sotto forma di \textbf{pacchetti} (a volte detti
-        \textbf{PDU}, \textbf{Packet Data Unit}).\newline
+        \textbf{PDU}, \textbf{Packet Data Unit}).\\
         
         Si distingue da un sistema distribuito, che invece appare ai propri utenti come un singolo
         sistema coerente.
 
-        \subsection{Internet}
+    \subsection{Internet}
         \textbf{Internet (o Internetwork)} è l’interconnessione di reti di varia natura che consente lo scambio
-        di informazione rappresentata in forma digitale, cioè come sequenza di cifre binarie (bit).\newline
+        di informazione rappresentata in forma digitale, cioè come sequenza di cifre binarie (bit).\\
 
         Si può dire che un \textbf{computer è su Internet} se esegue la pila di protocolli TCP/IP, ha un indirizzo
         IP, e può spedire pacchetti IP a tutti gli altri computer su Internet (questi argomenti saranno
         trattati nei capitoli successivi).
 
-        \subsection{Extranet}
+    \subsection{Extranet}
         L’\textbf{Extranet} è una Intranet estesa ad alcuni soggetti non operanti nella stessa rete (p.e. clienti,
         fornitori, consulenti).
 
-        \subsection{ISP}
+    \subsection{ISP}
         Un \textbf{ISP (Internet Service Provider)} indica un’organizzazione o un’infrastruttura che mette a
         disposizione dei servizi inerenti a Internet per degli utenti, come la posta elettronica o l’accesso
         al World Wide Web.
 
-        \subsection{Protocollo}
+    \subsection{Protocollo}
         Informalmente, un \textbf{protocollo} è un accordo, tra le parti che comunicano, sul modo in cui deve
         procedere la comunicazione. Violare il protocollo rende la comunicazione più difficile, se non
-        del tutto impossibile.\newline
+        del tutto impossibile.\\
 
         Formalmente, un \textbf{protocollo} è un \underline{insieme di regole} che definisce l’interazione tra sistemi.
 
-        \subsection{Modello clinet/server}
+    \subsection{Modello clinet/server}
         Il \textbf{modello client/server} è un modello in cui sono presenti due entità (client e server), nel
         quale il client si connette al server mediante una rete, per la fruizione di un certo servizio (come
         la condivisione dati).
 
-        \subsection{Gateway}
+    \subsection{Gateway}
         Un gateway è un dispositivo di rete (generalmente un router) che collega due reti eterogenee.
         Il suo scopo principale è quello di veicolare i pacchetti di rete all’esterno di una rete locale.
 
-        \subsection{LAN}
+    \subsection{LAN}
         Le \textbf{LAN (Local Area Network)} sono reti private installate all’interno di un singolo edificio o
         campus, con dimensione \underline{fino a qualche Km}, ed hanno come scopo la condivisione di risorse
         (come stampanti) e lo scambio di informazioni.
 
-        \subsection{MAN}
+    \subsection{MAN}
         Una \textbf{MAN (Metropolitan Area Network)} è una rete che copre un’intera città e collega più LAN
         geograficamente vicine. Di solito si tratta di singole filiali di un’azienda, che vengono connesse
         ad una MAN attraverso l’affitto di linee dedicate.
 
-        \subsection{WAN}
+    \subsection{WAN}
         Una \textbf{WAN (Wide Area Network)} è una rete che copre un’area geograficamente estesa, spesso
         una nazione o un continente. Il numero di reti locali o singoli computer che si possono
         connettere ad una singola WAN è teoricamente illimitato.
 
-        \subsection{Servizio connection oriented}
+    \subsection{Servizio connection oriented}
         Un servizio \textbf{connection oriented (orientato alla connessione)} è un servizio di rete in cui
         l’utente che lo vuole usare deve \underline{stabilire una connessione} (mediante la creazione di un circuito,
         che sia fisico o virtuale), \underline{usarla} e quindi \underline{rilasciarla}. Nella maggior parte dei casi, l’ordine dei bit
         inviati è conservato e arrivano nella sequenza con cui sono stati trasmessi, che rende questa
-        categoria di servizi \textbf{affidabile}.\newline
+        categoria di servizi \textbf{affidabile}.\\
 
         Un’analogia utile per capire, è quella tra il servizio connection oriented e il \textbf{sistema telefonico}.
         Per parlare con qualcuno si deve prendere il telefono, comporre il numero, parlare e poi
         riagganciare.
 
-        \subsection{Servizio connectionless}
+    \subsection{Servizio connectionless}
         Un servizio \textbf{connectionless (senza connessione)} si contrappone al servizio con connessione
         e non viene quindi stabilita una connessione. I dati vengono instradati in maniera indipendente
         l’uno dall’altro, senza verificare che il destinatario sia raggiungibile e senza controllare che i
-        dati arrivino nell’ordine desiderato, che rende questa categoria di servizi \textbf{inaffidabile}.\newline
+        dati arrivino nell’ordine desiderato, che rende questa categoria di servizi \textbf{inaffidabile}.\\
 
         Un’analogia utile per capire, è quella tra il servizio connectionless e la \textbf{posta}. Ogni messaggio
         (lettera) trasporta l’indirizzo completo del destinatario ed è instradato attraverso il sistema
@@ -78,19 +78,19 @@
         stessa destinazione, il primo inviato è anche il primo ad arrivare; ma è possibile che incontri un
         ritardo, e quindi arrivi dopo il secondo.
 
-        \subsection{Servizio best effort}
+    \subsection{Servizio best effort}
         Un servizio \textbf{best effort} (\textbf{massimo impegno}, interpretato “come va, va”) è un servizio
         inaffidabile che non offre alcuna garanzia di consegna dei pacchetti (alcuni di essi possono
         perdersi e avere bisogno di essere ritrasmessi, o andare fuori sequenza) né di controllo di
         errore, di flusso e di congestione.
 
-        \subsection{Quality of Service}
+    \subsection{Quality of Service}
         Il termine \textbf{Quality of Service} (abbreviato \textbf{QoS}) è utilizzato per indicare i parametri usati per
         caratterizzare la qualità del servizio offerto da una rete (ad esempio perdita di pacchetti,
         ritardo), o gli strumenti o tecniche per ottenere una qualità di servizio desiderata. Si
         contrappone al termine best effort.
 
-        \subsection{Unicsting, Multicasting e Broadcasting}
+    \subsection{Unicsting, Multicasting e Broadcasting}
         Unicasting, Multicasting e Broadcasting sono delle metodologie per la trasmissione dei dati.
         La distinzione avviene in base al numero dei ricevitori:
 
@@ -100,7 +100,7 @@
             \item \textbf{Broadcasting}: trasmissione di dati tra un trasmettitore e tutte le macchine della rete (1-tutti).
         \end{itemize}
 
-        \subsection{RFC}
+    \subsection{RFC}
         Gli \textbf{RFC (Request For Comment)}, sono una serie di rapporti tecnici numerati
         cronologicamente che riportano informazioni o specifiche riguardanti nuove ricerche,
         innovazioni e metodologie di Internet. Sono redatti da un organismo internazionale chiamato
