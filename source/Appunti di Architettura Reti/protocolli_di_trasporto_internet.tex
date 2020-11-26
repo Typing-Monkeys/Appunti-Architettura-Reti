@@ -118,19 +118,17 @@
         spacciarsi per una delle due parti utilizzando il suo stesso indirizzo IP) e stabilire una
         connessione con l’altra semplicemente predicendo l’ISN.\\
         
-        Come anticipato durante la spiegazione dell’intestazione, il protocollo di base utilizzato dalle
-        entità TCP è il protocollo \textbf{sliding window}, utilizzato per il controllo di flusso. Grazie al
-        protocollo sliding window, \underline{il mittente può inviare più di un segmento anche se non ha ancora
-        ricevuto il riscontro per il primo frame inviato}. Comunque, è garantito che nessun segmento
-        andrà perso e che i frame arriveranno nell’ordine corretto. Il protocollo ha questo nome
-        perché utilizza 2 finestre (ovvero 2 intervalli) che vengono modificati durante l’algoritmo,
-        avanzando sui numeri di segmenti spediti e ricevuti:
+        Come anticipato durante la spiegazione dell’intestazione, il protocollo di base utilizzato dalle entità TCP è il protocollo \textbf{sliding window}, utilizzato per il controllo di flusso.
+        Grazie al protocollo sliding window, \underline{il mittente può inviare più di un segmento anche se non ha ancora ricevuto il riscontro per il primo frame inviato}.
+        Comunque, è garantito che nessun segmento andrà perso e che i frame arriveranno nell’ordine corretto. Il protocollo ha questo nome perché utilizza 2 finestre (ovvero 2 intervalli) che vengono modificati durante l’algoritmo, avanzando sui numeri di segmenti spediti e ricevuti:
+        
         \begin{itemize}
             \item Una finestra è dedicata al \textbf{mittente}: contiene i numeri dei \textbf{segmenti già spediti} ma per
             cui non si è ancora ricevuta una conferma (\textbf{no ACK});
             \item l’altra finestra è per il \textbf{ricevente}: contiene i numeri dei \textbf{segmenti che può ricevere
         senza doverli subito confermare}.
         \end{itemize}
+        
         Quando un mittente invia un segmento, viene fatto partire un timer. Una volta arrivato a
         destinazione, l’entità TCP ricevente invia un segmento contrassegnato da un numero di
         acknowledgement uguale al numero di sequenza successivo che prevede di ricevere. Se il timer

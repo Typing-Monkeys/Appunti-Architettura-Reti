@@ -1,0 +1,386 @@
+\section{Servizi di Rete}
+
+    I livelli sotto lo strato applicazione forniscono il trasporto affidabile, ma non svolgono alcun
+    lavoro per gli utenti. Di seguito vengono presentate alcune applicazioni concrete delle reti.
+
+    \subsection{Telnet}
+
+        \textbf{Telnet} è un protocollo di rete che ha come obiettivo il fornire un supporto per le comunicazioni
+        sufficientemente \textbf{generalizzato}, \textbf{bidirezionale} ed \textbf{orientato ai byte}. È un servizio che
+        permette di accedere in remoto ad una macchina, tramite emulazione di terminale attraverso
+        la rete, basandosi sul protocollo \textbf{TCP} e sul paradigma client/server. Di solito a tale servizio è
+        assegnata la \textbf{porta 23}, ed è possibile utilizzare un programma Telnet per stabilire una
+        connessione interattiva ad un qualche altro servizio del server. Si prenda come esempio il
+        collegamento alla porta 25, sulla quale si trova un server SMTP (utilizzato per la posta ed
+        analizzato in seguito).\\
+
+        Telnet si basa su \textbf{3 aspetti}:
+
+        \begin{itemize}
+            \item \textbf{NVT (Network Virtual Terminal)}: è un terminale virtuale con caratteristiche generali. Ogni server o client traduce i propri controlli nativi in quelli del NVT;
+            \item \textbf{Opzioni negoziate}: tale negoziazione avviene tra client e server per aumentare le funzionalità della sessione Telnet da aprire;
+            \item \textbf{Viste simmetriche}: degli strumenti per evitare che la negoziazione delle opzioni generi
+            cicli di opzioni senza fine (errata interpretazione).
+        \end{itemize}
+
+        Il problema principale di Telnet riguarda la sicurezza: è di fatti un protocollo non criptato,
+        quindi password, nome utente e tutte le altre informazioni sono inviate in chiaro. A questa
+        problematica pone rimedio \textbf{SSH} (analizzato in seguito).
+
+    \subsection{Comandi r}
+
+        I \textbf{comandi r} sono progettati per sistemi BSD Unix e forniscono delle facilitazioni specifiche per Unix.
+        Di seguito i comandi più usati:
+
+        \begin{itemize}
+            \item \textbf{rlogin (remote login)}: permette di amministrare una serie di macchine autenticandosi
+            una sola volta (e quindi non richiedendo altre volte la password). È una soluzione molto
+            comoda che facilita le configurazioni di ambienti distribuiti, ma porta ovvie
+            problematiche di sicurezza;
+            
+            \item \textbf{rsh (remote shell)}: consente l’esecuzione remota di un singolo comando.
+        \end{itemize}
+
+        Anche in questi comandi non vi è alcuna forma di crittografia e pertanto sono stati anch’essi rimpiazzati da \textbf{SSH}.
+
+    \subsection{FTP}        
+        \textbf{FTP (File Transfer Protocol)} è un protocollo basato su TCP ed è impiegato per il trasferimento 
+        di file in rete. Di solito a tale servizio è assegnata la \textbf{porta 21}.\\
+
+        A differenza di altri protocolli, FTP utilizza 2 connessioni separate per gestire comandi e dati:
+
+        \begin{itemize}
+            \item \textbf{PI (Protocol Interpreter)}: si occupa di trasmettere comandi fra il client e il server.
+            Tramite esso inoltre si dà inizio al processo FTP;
+            \item \textbf{DTP (Data Transfer Process)}: si occupa del trasferimento vero e proprio dei dati tra un
+            client e un server. Durante l’esecuzione, client e server si scambiano i ruoli
+            continuamente.
+        \end{itemize}
+
+        È bene notare che ad oggi, gran parte delle richieste FTP non avviene da linea di comando,
+        ma da browser, ad esempio specificando un URL.\\
+
+        Normalmente, FTP richiede l’autenticazione del client tramite nome utente e password,
+        tuttavia sono state pensate delle \textbf{sessioni anonime}, che permettono l’utilizzo del protocollo in
+        sola lettura, il che evita l’upload sul server di dati non autorizzati. Per usare una sessione
+        anonima, basta usare anonymous come username e come password qualsiasi stringa, come ad
+        esempio l’indirizzo e-mail o semplicemente la parola "guest".
+
+        Nelle versioni iniziali, FTP prevedeva il trasferimento in chiaro delle password. In seguito, con 
+        RFC 2228, sono stati introdotti nuovi comandi per aumentare la sicurezza:
+
+        \begin{itemize}
+            \item \textbf{AUTH}: meccanismo utilizzato per l’autenticazione da utilizzare;
+            \item \textbf{PORT}: il livello di sicurezza che verrà usato. Ce ne sono diversi: \begin{itemize}
+                \item \textbf{Clear}: trasmissione in chiaro;
+                \item \textbf{Safety}: richiesta la verifica sull’integrità dei dati, si usa il comando \textbf{MIC};
+                \item \textbf{Confidential}: trasmissione cifrata, si usa il comando \textbf{CONF};
+                \item \textbf{Private}: trasmissione cifrata e richiesta la verifica sull’integrità dei dati, si usa il comando \textbf{ENC}.
+            \end{itemize}
+        \end{itemize}
+
+        Nonostante ciò, anche FTP è stato inglobato in SSH per aumentare ancor di più la sicurezza.\\
+
+        Un’alternativa più leggera all’FTP standard è \textbf{TFTP (Trivial FTP)}, che sfrutta UDP al posto di TCP: 
+        pensata per l’ambito LAN, è spesso utilizzata dalle macchine diskless per ottenere l’immagine del sistema operativo.
+
+    \subsection{SSH}
+
+        \textbf{SSH (Secure Shell)} è un protocollo per comunicazioni di rete sicure progettato per essere
+        relativamente semplice ed economico da implementare, utilizzando la crittografia asimmetrica.\\
+
+        La versione iniziale (SSH1) era focalizzata sulla fornitura di una struttura di accesso remoto
+        sicura per sostituire Telnet e altri schemi di accesso remoto che non fornivano sicurezza. Nella
+        nuova versione (SSH2), vengono corretti una serie di difetti di sicurezza dello schema originale
+        e migliorate performance e flessibilità, che comprende anche l’implementazione di \textbf{SFTP
+        (Secure File Transfer Protocol)}.\\
+
+        Le applicazioni client e server SSH sono ad oggi ampiamente disponibili per la maggior parte
+        dei sistemi operativi ed è diventato il metodo di scelta principale per l'accesso remoto ad un
+        server, rimpiazzando Telnet, i comandi R ed FTP.\\
+
+        SSH è organizzato in tre protocolli che in genere vengono eseguiti su TCP:
+        %inserire tabella SSH pagina 39%
+
+        \begin{itemize}
+            \item \textbf{Transport Layer Protocol}: definisce l'autenticazione del server, lo scambio delle chiavi,
+            la cifratura, la compressione (opzionale) e il controllo d'integrità dei pacchetti ;
+            \item \textbf{User Authentication Protocol}: definisce l'autenticazione dell'utente, che può avvenire
+            in 3 metodi: utilizzando la public key, la password o l'hostbased;
+            \item \textbf{Connection Protocol}: gestisce funzionalità quali l'instaurazione di terminali interattivi,
+            esecuzione di comandi remoti e l’inoltro di connessioni e di applicazioni grafiche X11,
+            utilizzando canali multipli di comunicazione passanti per lo stesso tunnel criptato del
+            Transport Layer.
+        \end{itemize}
+
+        I livelli interni al protocollo SSH coprono gli ultimi 3 livelli della pila OSI.\\
+
+        Sono resi disponibili diversi applicativi che utilizzano SSH. Tra questi, \textbf{OpenSSH} è un
+        insieme di programmi open source, che rendono disponibili sessioni crittografate di
+        comunicazione in una rete. Tra i programmi più utilizzati, sono presenti:
+
+        \begin{itemize}
+            \item \textbf{\emph{ssh}}, che sostituisce rlogin e Telnet;
+            \item \textbf{\emph{scp}}, che sostituisce rcp;
+            \item \textbf{\emph{sftp}}, che sostituisce ftp;
+            \item \textbf{\emph{ssh-add}}, \textbf{\emph{ssh-agent}}, e \textbf{\emph{ssh-keygen}}, una serie di programmi per la generazione e la
+            gestione delle chiavi;
+            \item i nomi dei processi demoni rispettivamente per server SSH e server SFTP sono \textbf{\emph{sshd}} e
+            \textbf{\emph{sftp-server}}.
+        \end{itemize}
+
+    \subsection{DNS}
+
+        \emph{Il DNS richiederebbe una spiegazione sul funzionamento dei file di configurazione, ma per
+        una migliore comprensione e focalizzazione è stata tralasciata.}\\
+
+        Anche se i programmi possono teoricamente fare riferimento a host tramite i loro indirizzi IP,
+        per le persone sono difficili da ricordare. Inoltre, come detto, gli indirizzi IP possono cambiare.
+        Per questo motivo è stato inventato il \textbf{DNS (Domain Name System)}, un applicativo che effettua
+        la \textbf{risoluzione} di nomi di host in indirizzi IP, ovvero la traduzione di un nome sottoforma di
+        stringa in indirizzo IP. È anche possibile effettuare una \textbf{risoluzione inversa}.\\
+
+        Le caratteristiche più importanti del DNS sono 2:
+        \begin{itemize}
+            \item uno \textbf{schema di denominazione gerarchico basato su dominio};
+            \item un \textbf{sistema di database distribuito} per l’implementazione del suddetto schema.
+        \end{itemize}
+
+        In breve, DNS viene utilizzato come segue: per associare un nome ad un indirizzo IP, un
+        programma applicativo chiama una procedura di libreria chiamata \textbf{resolver (risolutore)},
+        passando il nome come parametro. Il risolutore invia quindi un pacchetto UDP a un server DNS
+        locale, che quindi cerca il nome e restituisce l’indirizzo IP al risolutore, che a sua volta lo
+        restituisce al chiamante.
+
+        \subsubsection{Lo spazio dei nomi DNS}
+
+            %Aggiungere immagine Domini pagina 40%
+
+            Il DNS è organizzato ad albero, la cui radice è indicata come “.” e ogni nodo al di sotto 
+            di esso è detto \textbf{dominio}. Ogni dominio può essere partizionato ovviamente in \textbf{sottodomini},
+             che possono essere a loro volta divisi e così via. Le foglie rappresentano i domini che non hanno sottodomini, che possono sia
+            rappresentare un singolo host che rappresentarne migliaia (come nel caso di una società).\\
+
+            Si noti che i nomi di dominio sono \textbf{case insensitive}.\\
+
+            Il primo livello dell’albero è l’insieme dei \textbf{domini di primo livello (}o \textbf{TLD, Top Level Domain)},
+            assegnati da \textbf{ICANN}, e ne esistono di 3 tipi:
+
+            \begin{itemize}
+                \item \textbf{gTLD (generic TLD)}: domini di primo livello generici, usati da particolari classi di
+                organizzazioni (ad esempio si usa \textbf{.com} per organizzazioni commerciali);
+                \item \textbf{ccTLD (country-code TLD)}: domini di primo livello nazionali, usati da uno stato o una
+                dipendenza territoriale (ad esempio \textbf{.it} per domini italiani);
+                \item \textbf{Infrastrutturali}: l’unico è \textbf{.arpa}, usato nella risoluzione inversa dei nomi.
+            \end{itemize}
+
+            I \textbf{domini di secondo livello (o SLD, Second Level Domain)}, in genere, appartengono alle
+            organizzazioni che li hanno registrati e comprendono il loro nome e il dominio di primo livello
+            separati da un punto. Tutti i \textbf{sottodomini} che seguono da destra verso sinistra il SLD vengono
+            creati per rendere la gestione del DNS modulare.\\
+
+            Si prenda come esempio \textbf{dmi.unipg.it}:
+            \begin{itemize}
+                \item il TLD è \textbf{.it}, che sta ad indicare la gerarchia italiana;
+                \item il SLD è \textbf{.unipg.it};
+                \item il sottodominio è \textbf{.dmi}.
+            \end{itemize}
+
+            Al contrario di quanto avviene con gli indirizzi IP, si noti che la parte più importante di un nome
+            è la prima partendo da destra (il TLD).\\
+
+            Ottenere un dominio di secondo livello è semplice: basta contattare un \textbf{registrar} (autorità di
+            registrazione dei domini) per il dominio di primo livello corrispondente (ad esempio \textbf{.it}), per
+            controllare se il nome desiderato è disponibile. Se non vi sono problemi, il richiedente paga una
+            tariffa annuale e ottiene il nome.\\
+
+            Ad ogni dominio, che sia rappresentato da un singolo host o da un dominio di primo livello, può
+            essere associato un insieme di \textbf{Resource Record (RR, record delle risorse)}.\\
+
+            Un \textbf{RR} è una tupla del database di un DNS Server che contiene la mappatura tra indirizzo IP
+            (supportata anche la v6) e nome. Ve ne sono di diversi tipi, ma per sinteticità sono stati omessi.
+
+        \subsubsection{Risoluzione}
+            Come anticipato, la traduzione di un nome in un indirizzo IP è detta \textbf{risoluzione}. Essa può
+            essere di due tipi:
+            
+            \begin{itemize}
+                \item \textbf{Statica}: la mappatura tra indirizzo IP e nome viene stabilita permanentemente
+                mediante una \textbf{host table}, memorizzata in un semplice file ASCII (\textbf{/etc/hosts});
+                \item \textbf{Dinamica}: la mappatura tra indirizzo IP e nome viene stabilita ad ogni avvio dell’host,
+                effettuando richieste a server DNS. Permette ad un nome di essere sempre associato
+                all’indirizzo IP di uno stesso host, anche se l’indirizzo cambia nel tempo.
+            \end{itemize}
+
+        \subsubsection{BIND}
+            \textbf{BIND (Berkeley Internet Name Domain)} è l’implementazione più comune del DNS su
+            ambiente Unix, ed è composto da \textbf{una parte client (il resolver)} ed \textbf{una parte server (named)}
+            che comunicano tramite la porta 53.\\
+
+            \textbf{Resolver} è una libreria di funzioni che permette di generare e inviare al server (tramite UDP)
+            le richieste di informazioni sui nomi dei domini; \textbf{Named} è un processo demone in grado di
+            servire le richieste del resolver e rispondere (tramite TCP).\\
+
+            \textbf{BIND} può essere configurato come:
+            
+            \begin{itemize}
+                \item \textbf{Caching-only}: il server reindirizza ogni richiesta del resolver ad altri server e
+                memorizza le risposte in una cache locale;
+                \item \textbf{Primary}: il server è gestore di informazioni riguardanti specifici domini. Legge le
+                informazioni da appositi file configurati dall’amministratore, detti \textbf{\emph{zone file}};
+                \item \textbf{Secondary}: il server scarica gli zone file dal primary server e li memorizza localmente
+                in appositi file detti \textbf{\emph{zone file transfer}}.
+            \end{itemize}
+
+            Per configurare il resolver, il file relativo è \textbf{‘/etc/resolv.conf’}.\\
+            Per configurare il \textbf{named}, i file relativi sono \textbf{‘/etc/named.conf’}, \textbf{‘/etc/named.ca’},
+            \textbf{‘/named.local’}, \textbf{‘/etc/named.hosts’}, \textbf{‘/etc/named.rev’}.
+    
+    \subsection{NIS}
+
+        \textbf{NIS (Network Information Service)} è un servizio (spesso utilizzato nel contesto di
+        applicazioni parallele e distribuite) che permette di definire delle risorse di amministrazione
+        comuni ad un insieme di host, permettendo un controllo centralizzato e la condivisione
+        automatica di risorse. Così facendo, un utente può utilizzare host differenti mantenendo gli
+        stessi username, password, cartella home e permessi.\\
+
+        Il NIS non utilizza i file amministrativi (come ad esempio /etc/passwd e /etc/group) così come
+        sono, ma ne crea una copia: queste copie sono denominate \textbf{NIS map}. Le \textbf{NIS map} sono dei
+        database in cui si memorizzano solo coppie di dati (chiave-valore) e vengono memorizzate nel
+        server principale, che le rende disponibili ai client tramite il processo \textbf{ypserv}. I client possono
+        aggiornare le loro informazioni ricevendo i database tramite il processo demone \textbf{ypbind}.
+        Generalmente, le informazioni NIS sono memorizzate nella directory \textbf{/var/yp}.\\
+
+        Quando si attiva il NIS, si consiglia di non usare più i vecchi comandi amministrativi per
+        cambiare password/permessi o quant’altro, perché il NIS non si accorge (autonomamente) dei
+        cambiamenti apportati ai file amministrativi tradizionali. Bisogna invece utilizzare i comandi
+        specifici del NIS.
+
+    \subsection{NFS}
+
+        \textbf{NFS (Network File System)} è un protocollo che permette la condivisione di directory e file su
+        una rete. L’effetto finale che ottiene un utente è poter accedere ed utilizzare file memorizzati su
+        sistemi remoti come se fossero locali.\\
+
+        Lato \textbf{client}, l’inserimento nel proprio filesystem di una directory situata in un host remoto
+        viene detto \textbf{mounting}, realizzata col comando \textbf{\emph{mount}}. Il processo demone che gestisce l’I/O è
+        \textbf{biod}.\\
+
+        Lato \textbf{server}, la condivisione di una directory locale ad host specifici è detta \textbf{sharing} e viene
+        realizzata col comando \textbf{\emph{export}}, configurabile tramite il file \textbf{/etc/exports} dove è possibile
+        elencare directory da esportare con relativi host che hanno l’accesso. Il processo demone che
+        gestisce le richieste NFS è \textbf{nsfd}.\\
+
+        Gli sviluppatori hanno implementato NFS creando 3 software indipendenti, compreso \textbf{NFS}.
+        Gli altri due sono \textbf{RPC} e \textbf{XDR}.\\
+
+        \textbf{RPC (Remote Procedure Call)} consente di codificare e decodificare le richieste tra i client ed
+        i server, permettendo di accedere ai file system remoti con le stesse procedure che utilizzano
+        per accedere ai file locali.\\
+
+        \textbf{XDR (eXternal Data Representation)} consente di scambiare dati tra macchine con
+        architettura eterogenea fornendo una rappresentazione dei dati indipendente dalla macchina.
+        Grazie ad esso, non bisogna preoccuparsi della conversione tra le diverse rappresentazioni dei
+        dati a livello hardware.
+    
+    \subsection{SNMP}
+
+        \textbf{SNMP (Simple Network Management Protocol)} è ad oggi il più potente e diffuso protocollo
+        di \textbf{gestione di reti}, sistemi e applicazioni, introducendo una semplice \textbf{architettura} chiamata
+        \textbf{INMF (Internet Network Management Framework)}.\\
+
+        SNMP definisce la modalità di scambio di informazioni tra apparecchiature di rete, consentendo
+        inoltre agli amministratori di tenere sotto controllo le prestazioni della rete e accorgersi in
+        tempo reale di malfunzionamenti della stessa.\\
+
+        Prevede 2 \textbf{ruoli}:
+        
+        \begin{itemize}
+            \item \textbf{Agent}: moduli software che risiedono sui dispositivi da gestire (come \emph{host, stampanti,
+            router, switch, hub...});
+            \item \textbf{Manager}: uno o più host che possono interrogare e inviare comandi agli agent, tramite
+            UDP, sulle porte 161 e 162.
+        \end{itemize}
+
+        SNMP è il protocollo di gestione e definisce le modalità d’interazione tra il manager e gli agent.\\
+
+        Le informazioni trattate dagli agent sono dette \textbf{managed objects} (in italiano vengono detti
+        semplicemente \textbf{oggetti}) e vengono raccolte in un database chiamato \textbf{MIB (Management
+        Information Base)}. Un MIB ha una \textbf{struttura ad albero}:
+
+        \begin{itemize}
+            \item i \textbf{nodi} sono organizzazioni e sotto-organizzazioni rappresentate da una etichetta ed un
+            numero. Il nodo più importante è \textbf{mib-2}, dove vengono raccolte le variabili usate da
+            SNMP attualmente raggruppabili in 12 categorie (altre verranno aggiunte);
+            \item le \textbf{foglie} rappresentano i managed objects. Ogni oggetto all’interno del MIB viene
+            identificato mediante un \textbf{OID (Object ID)}, ovvero la sequenza di numeri dei nodi
+            attraversati nel cammino dalla radice alla foglia, intervallati da punti.
+        \end{itemize}
+
+        Le strutture dati usate nel MIB sono definite sotto forma di regole nello \textbf{SMI (Structure of
+        Management Information)}, specificate con lo standard ISO chiamato ASN.1 (Abstract Syntax
+        Notation One), un linguaggio di definizione di oggetti. In particolare vengono definiti nome,
+        sintassi e codifica.\\
+
+        SNMP conta finora 3 versioni. La \textbf{terza versione} del protocollo rimedia alle carenze in merito
+        a \textbf{sicurezza} e \textbf{privacy} delle versioni precedenti, tramite un sistema di autenticazione e
+        strumenti di controllo agli accessi.\\
+
+        Il software open source più popolare per la gestione delle reti utilizzando SNMP è \textbf{nagios}.
+        
+    \subsection{DHCP}
+
+        \textbf{DHCP (Dynamic Host Configuration Protocol)} permette agli host di una rete locale di
+        ricevere, ad ogni loro richiesta di accesso ad una rete, la configurazione IP necessaria per
+        stabilire una connessione ed operare. Utilizza \textbf{UDP} sulla \textbf{porta} 67 (lato server) e 68 (lato client).\\
+
+        Come RARP e \textbf{BOOTP (Bootstrap Protocol}, predecessore di DHCP, ormai in disuso perché
+        permetteva solo la configurazione manuale), anche DHCP utilizza l’architettura \textbf{client/server}:
+        il \textbf{server} (un host, molto spesso un \textbf{router}) provvede all’assegnazione degli indirizzi IP ai \textbf{client}
+        che li richiedono.\\
+
+        Poiché il server DHCP potrebbe non essere raggiunto dalle trasmissioni broadcast (i router non
+        fanno passare i pacchetti broadcast), è necessario installare in ogni LAN un \textbf{DHCP relay agent
+        (agente di inoltro DHCP)}, che si occupa di intercettare e rigirare in modalità \textbf{\emph{unicast}} al server
+        DHCP (che può trovarsi anche in una rete distante) le trasmissioni DHCP intercettate. È chiaro
+        che il relay agent ha bisogno di un’unica informazione: l’indirizzo IP del server DHCP.\\
+
+        DHCP presenta 3 opzioni di configurazione:
+
+        \begin{itemize}
+            \item \textbf{Automatica}: i client ottengono un indirizzo IP permanente;
+            \item \textbf{Dinamica}: ad ogni nuova connessione i client ottengono un indirizzo IP, il quale ha un
+            tempo di validità (detto \textbf{lease}) al cui termine ritorna tra gli indirizzi disponibili. Ciò
+            permette di riutilizzare indirizzi non più in uso dai client;
+            \item \textbf{Manuale}: i client ottengono un indirizzo IP assegnato dall’amministratore e il DHCP è
+            utilizzato semplicemente per comunicare l’indirizzo scelto.
+        \end{itemize}
+
+        Il processo di assegnamento degli indirizzi si divide in 4 fasi:
+
+        \begin{itemize}
+            \item \textbf{Discovering}: il client invia in modalità broadcast un pacchetto \textbf{DHCP Discover}, per
+            richiedere l’assegnamento di un indirizzo. Si noti che in questa fase il client è ancora
+            sprovvisto di indirizzo IP e il pacchetto avrà come mittente 0.0.0.0;
+            \item \textbf{Offering}: i server che ricevono la richiesta, rispondono (se hanno indirizzi liberi a
+            disposizione) con \textbf{DHCP Offer}, in cui propongono una configurazione IP al client;
+            \item \textbf{Requesting}: una volta ricevute le offerte dai server, il client le valuta e risponde in
+            modalità broadcast con \textbf{DHCP Request}, in cui comunica quale server ha scelto;
+            \item \textbf{Acknowledgment}: se l’assegnamento è avvenuto con successo, il server risponde al
+            client con \textbf{DHCP ACK}, altrimenti con \textbf{DHCP NACK (Negative Acknowledgment)}.
+        \end{itemize}
+
+        Nei sistemi Unix, una possibile implementazione Open Source del DHCP è rappresentata da
+        \textbf{dhcpd}, la cui configurazione viene eseguita mediante un file di testo chiamato \textbf{dhcpd.conf}.
+
+    \subsection{NAT}
+        
+        Il problema dell’esaurimento degli indirizzi IP non è un problema teorico che potrebbe
+        presentarsi in un lontano futuro: sta accadendo proprio qui e ora. La soluzione a lungo termine
+        è rappresentata da IPv6, ma la transizione sta procedendo lentamente e si è resa necessaria una
+        soluzione attuabile in tempi brevi.\\
+        La soluzione adottata si chiama \textbf{NAT (Network Address Translation)}. L’idea di base di NAT è
+        assegnare ad ogni azienda un singolo indirizzo IP (o, al massimo, un piccolo numero di indirizzi)
+        per il traffico di Internet. Dentro l’azienda, ogni host riceve un indirizzo IP privato e locale.
+        Nessuno di questi indirizzi potrà apparire su Internet, infatti quando un pacchetto lascia
+        l’azienda e va verso Internet, viene effettuata una \textbf{traduzione di indirizzo} (di solito dal router).
