@@ -1,0 +1,32 @@
+\section{News}
+
+    Molto tempo prima di Internet esisteva il sistema di news \textbf{USENET}, un sistema distribuito per
+    il dialogo ed il confronto tra utenti. Consiste in circa 30.000 \textbf{newsgroup}, gruppi di discussione
+    gerarchici in cui si inviano e leggono articoli correlati. Una newsgroup è indicata nella forma:
+    \textbf{radice.gruppo.sottogruppo}, con un numero di sottogruppi indefinito. Un utente vi si può
+    iscrivere, in modo da ricevere la lista dei messaggi del gruppo, e a differenza delle mail, le news
+    vengono scaricate sul client solo nel momento in cui l’utente vi accede.\\
+
+    Quando un utente invia un messaggio ad un newsgroup, si dice che effettua un \textbf{post}. Nel caso
+    in cui i messaggi vengono inviati a diversi newsgroup, si parla di \textbf{crosspost}. I messaggi nei
+    gruppi sono però \textbf{moderati}, ovvero passano per un intermediario, detto \textbf{moderatore}, che
+    determina la pubblicazione o il rifiuto di un articolo. Questa scelta viene anche basata sulla
+    \textbf{netiquette}: delle regole informali che disciplinano il buon comportamento di un utente.\\
+
+    In alcuni casi, come la creazione di un particolare newsgroup, è possibile indire una \textbf{CfV (Call
+    for Votes)}, dove gli utenti possono esprimere le loro preferenze. Generalmente, le CfV vengono
+    effettuate sotto la radice \textbf{news}, mentre sotto la radice \textbf{alt} c’è più libertà, ed è in genere dove si
+    può trovare di tutto, compreso materiale al limite della legalità.\\
+
+    Essendo un sistema distribuito, è necessario scambiare i messaggi tra i vari server dislocati. Il
+    meccanismo per assolvere questo compito è detto \textbf{newsfeed}, dove il server che riceve il
+    messaggio, lo inoltra ai server vicini, i quali a loro volta effettueranno le stesse operazioni fino
+    a raggiungere tutti. I messaggi vengono archiviati nei server fino ad una data di scadenza
+    prefissata e variabile da gruppo a gruppo, momento nel quale vengono fisicamente cancellati.
+
+    \subsection{NNTP}
+
+        \textbf{NNTP (Network News Transfer Protocol)} è il protocollo client/server che regola lo scambio
+        dei messaggi tra i server nel meccanismo di newsfeed. Nello specifico, definisce distribuzione,
+        interrogazione, accesso e invio di news. Utilizza TCP e dialoga sulla porta 119.
+        Quando c’è un nuovo messaggio, un server informa gli altri tramite il comando \textbf{IHAVE}.
