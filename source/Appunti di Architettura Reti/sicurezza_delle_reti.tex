@@ -1,0 +1,187 @@
+\section{Sicurezza delle reti}
+
+    Tra gli attributi dell’oggetto dell’analisi di sicurezza informatica, rientra la seguente triade:
+
+    \begin{itemize}
+        \item \textbf{Confidenzialità}: le informazioni possono essere \textbf{lette} solo dagli aventi diritto;
+        \item \textbf{Integrità}: le informazioni possono essere \textbf{modificate} solo dagli aventi diritto;
+        \item \textbf{Disponibilità}: le informazioni possono essere \textbf{accedute} al momento del bisogno.
+    \end{itemize}
+
+    Questa triade prende il nome di CIA, dalle iniziali inglesi dei 3 termini.\\
+    In seguito, sono state definite 2 nuove proprietà:
+
+    \begin{itemize}
+        \item \textbf{Accountability}: ogni utente e azione devono poter essere identificati;
+        \item \textbf{Auditability}: l’efficacia dei meccanismi scelti deve poter essere verificata.
+    \end{itemize}
+
+    Nell’ambito della sicurezza informatica, è inoltre comune usare i seguenti termini:
+
+    \begin{itemize}
+        \item \textbf{Privacy}: il diritto che ha ogni individuo di determinare quando, quanto, come e a chi
+        comunicare le informazioni che riguardano sé stesso;
+        \item \textbf{Non ripudio}: fornire l’evidenza irrefutabile che una certa azione è stata compiuta da 
+        una determinata persona e non da altre o che un certo messaggio è stato spedito da un
+        determinato mittente (firma digitale);
+        \item \textbf{Autenticazione}: fornire la prova che l’utente è esattamente chi dice di essere (da non
+        confondere con l’identificazione dell’accountability);
+        \item \textbf{Tracciabilità}: capacità di tracciare le azioni compiute dagli utenti sulle risorse;
+        \item \textbf{Forensics}: capacità di provare che determinati attacchi hanno avuto luogo.
+    \end{itemize}
+
+    Definiamo inoltre vulnerabilità un difetto di una componente di un sistema informatico,
+    classificandola in 3 tipi principali:
+
+    \begin{itemize}
+        \item \textbf{Procedurali}: difetto nella modalità con cui si opera;
+        \item \textbf{Organizzative}: difetto nelle persone che operano;
+        \item Degli \textbf{strumenti informatici}: difetto nell’hardware/software utilizzato. Per questo tipo
+        di vulnerabilità, esistono 3 sottotipi: \begin{itemize}
+            \item \textbf{Specifica}: difetto nella \textbf{progettazione} di un componente: ad esempio quando un
+            componente è, inutilmente, più generale del necessario;
+            \item \textbf{Implementativa}: difetto nella \textbf{realizzazione} di un componente: ad esempio la
+            mancanza di controlli sugli input;
+            \item \textbf{Strutturale}: difetto che nasce dalla \textbf{combinazione} di uno o più componenti del
+            sistema.
+        \end{itemize}
+    \end{itemize}
+
+    Sfruttando una vulnerabilità, è possibile effettuare un attacco informatico. In generale, le varie
+    fasi sono:
+
+    \begin{itemize}
+        \item Raccolta di informazioni;
+        \item Individuazione delle vulnerabilità;
+        \item Ricerca o costruzione di un programma (detto \textbf{exploit}) che sfrutti le vulnerabilità;
+        \item Esecuzione dell’exploit;
+        \item Installazione di strumenti per il controllo;
+        \item Cancellazione delle tracce;
+        \item Accesso ad un sottoinsieme di informazioni.
+    \end{itemize}
+
+    Alcune delle categorie dei possibili attacchi che possono andare a violare l’affidabilità di un
+    server Web sono:
+
+    \begin{itemize}
+        \item \textbf{Estensibilità del server}: attacchi ai servizi offerti dal server. Ad esempio, potersi
+        connettere ad un database via CGI;
+        \item \textbf{Estensibilità del browser}: attacchi ai servizi fruibili da browser. Ad esempio, alcuni usi
+        di ActiveX, Java, Javascript, VBSript possono compromettere la sicurezza;
+        \item \textbf{Distruzione del servizio}: attacchi mirati a bloccare l’erogazione di un servizio. Un
+        esempio sono gli attacchi DoS;
+        \item \textbf{Supporto complicato}: attacchi mirati alle vulnerabilità dei protocolli di basso livello,
+        alcune volte necessari per un funzionamento corretto del sistema.
+    \end{itemize}
+
+    Per poter descrivere lo stato di sicurezza di un sistema informatico si effettua la cosiddetta
+    \textbf{analisi del rischio}. L’analisi del rischio consiste nell’identificazione dei beni da proteggere,
+    valutandone le possibili minacce in termini di probabilità di occorrenza e relativo danno
+    potenziale. In base alla stima del rischio si decide se, come e quali contromisure di sicurezza
+    adottare, giustificando i costi per la messa in sicurezza.\\
+
+    L’analisi del rischio comprende:
+
+    \begin{itemize}
+        \item \textbf{Analisi delle vulnerabilità}: descrive le vulnerabilità di un sistema informatico;
+        \item \textbf{Analisi degli attacchi}: descrive le tipologie di attacchi plausibili per le vulnerabilità
+        trovate e, per ogni attacco, le informazioni e le risorse necessarie ad eseguirlo;
+        \item \textbf{Analisi degli impatti}: per ogni attacco, si stabilisce la perdita dell’azienda;
+        \item \textbf{Analisi delle minacce}: per ogni attacco, si stabilisce chi ha interesse nell’attacco e chi
+        dispone delle risorse necessarie ad eseguirlo;
+        \item \textbf{Individuazione del rischio accettabile ed introduzione delle contromisure}: si
+        determinano le contromisure da attuare ed il rischio residuo, talvolta trasferibile a terzi
+        (come le assicurazioni).
+    \end{itemize}
+
+    \subsection{SSL}
+
+        \emph{Il funzionamento di SSL e TLS non sono stati trattati durante le lezioni, per cui si è evitato di
+        spiegare i vari processi.}\\
+
+        La sicurezza nel Web è un argomento molto vasto e sicuramente mettere in sicurezza le
+        connessioni è uno degli obiettivi più importanti oggigiorno. Per raggiungere questo obiettivo, è
+        stato inventato un pacchetto per la sicurezza chiamato \textbf{SSL (Secure Socket Layer)}, un
+        encryption system a doppia chiave pubblica e privata, usato nei server per garantire la privacy
+        durante le trasmissioni su Internet.\\
+
+        SSL si pone in una sorta di strato intermedio della pila OSI, tra il livello Applicazione e il livello
+        Trasporto, permettendo di cifrare le informazioni prima dell’invio ai client e evitando la lettura
+        da parte di potenziali terzi in grado di intercettare il traffico tra server e client.\\
+
+        Ogni server deve avere una doppia chiave (pubblica e privata) e un certificato X.509 usato per
+        firmare i dati, rilasciato da una \emph{Certificate Authority (CA)}, degli enti considerati \emph{trusted}.\\
+
+        Per effettuare una connessione con SSL, si deve:
+
+        \begin{enumerate}
+            \item Negoziare l’algoritmo di crittografia (come ad esempio DES o IDEA)
+            \item Il server si autentica al client (sempre) ed il client si autentica al server (opzionalmente);
+        \end{enumerate}
+
+        Quindi è possibile inviare dati criptati con la chiave concordata.\\
+
+        Si noti che HTTP usato sopra SSL prende il nuovo nome di \textbf{HTTPS (Secure HTTP)}, anche se si
+        tratta ancora del protocollo HTTP standard ed è normalmente disponibile su una porta diversa,
+        la \textbf{443}.\\
+
+        Nel 1996, Netscape Corp. (creatrice di SSL), sottopose il proprio protocollo all’IETF per la
+        standardizzazione. Il risultato fu \textbf{TLS (Transport Layer Security)}, anche noto con il nome di
+        \emph{SSL 3.1}. I cambiamenti operati all’SSL furono minimali e hanno reso TLS un po’ più robusto, ma
+        sono bastati a far sì che SSL versione 3 e TLS non riescano a comunicare tra loro. Non è ancora
+        chiaro se TLS soppianterà SSL nella pratica.
+
+    \subsection{Firewall}
+
+        Un \textbf{firewall} è un sistema che ha lo scopo di controllare il traffico tra due o più reti sulla base di
+        un insieme di regole. Si definiscono \emph{trusted} la rete interna da proteggere (solitamente una LAN)
+        e \emph{untrusted} le reti esterne (generalmente una o più WAN). Può essere implementato sia lato
+        hardware e software tramite un host con più schede di rete, costituendo il solo punto di
+        collegamento tra le reti coinvolte, sia unicamente lato software sui vari host della rete interna
+        da proteggere.\\
+
+        Ogni socket che viene aperto dall’interno verso l’esterno (e viceversa) viene verificato in base
+        alle regole definite all’interno del software, che viene detto \emph{packet filter}. Esistono due criteri
+        generali per l’applicazione delle singole regole:
+
+        \begin{itemize}
+            \item \emph{default-deny}: viene \textbf{permesso} solo quanto dichiarato esplicitamente, il resto è \textbf{bloccato};
+            \item \emph{default-allow}: viene \textbf{vietato} solo quanto dichiarato esplicitamente, il resto è \textbf{permesso}.
+        \end{itemize}
+
+        I firewall normalmente utilizzano il criterio \emph{default-deny}, in quanto garantisce una maggiore
+        sicurezza e precisione nella definizione delle regole.
+
+        \subsubsection{Packet Filter}
+
+            \emph{Il packet filter richiederebbe una spiegazione breve sul funzionamento del software iptables.}\\
+
+            Il packet filter è un tool che analizza l’intestazione dei vari pacchetti in entrata ed uscita e decide
+            il da farsi in base a determinati criteri. Gli elementi utilizzati nel filtraggio sono:
+
+            \begin{itemize}
+                \item \textbf{Header IP}: che si ricorda contiene informazioni come indirizzo IP del mittente e del
+                destinatario o il protocollo usato;
+                \item \textbf{Header TCP/UDP}: che si ricorda contiene informazioni come le porte o le flag utilizzate.
+            \end{itemize}
+
+            Per ogni pacchetto è possibile effettuare una delle seguenti operazioni:
+
+            \begin{itemize}
+                \item \textbf{ACCEPT}: il pacchetto viene accettato e lasciato proseguire;
+                \item \textbf{DROP}: il pacchetto viene scartato, senza mandare al mittente alcun messaggio;
+                \item \textbf{REJECT}: come DROP, ma il mittente riceverà un pacchetto ICMP con un messaggio;
+                \item \textbf{CHAIN} e \textbf{RETURN}: utilizzati per definire una concatenazione di regole.
+            \end{itemize}
+
+            L’insieme delle regole per il packet filtering è memorizzato in una tabella detta \textbf{filter}, che
+            contiene a sua volta 3 diverse liste di regole, dette \textbf{chains}, distinte a seconda del percorso di
+            routing del pacchetto:
+
+            \begin{itemize}
+                \item \textbf{INPUT}: riguarda i pacchetti che hanno come destinazione il firewall;
+                \item \textbf{OUTPUT}: riguarda i pacchetti emessi dal firewall;
+                \item \textbf{FORWARD}: riguarda i pacchetti che transitano attraverso il firewall.
+            \end{itemize}
+
+            Il packet filter più utilizzato (e preinstallato) su OS Linux è \textbf{iptables}.
