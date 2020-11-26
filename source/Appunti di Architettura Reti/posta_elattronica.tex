@@ -1,0 +1,196 @@
+\section{Posta Elettronica}
+La \textbf{posta elettronica} (o \textbf{e-mail}, dall’inglese \textbf{electronic mail}) è un servizio Internet che
+permette lo scambio di messaggi tra utenti.\\
+
+I sistemi di posta elettronica sono normalmente composti da 2 software:
+\begin{itemize}
+    \item \textbf{MUA (Mail User Agent, agente utente)}: consente alle persone di leggere e inviare la
+posta elettronica (es: gmail, outlook…).
+Costituisce un’interfaccia utente con le seguenti funzionalità:
+    \begin{itemize}
+        \item \textbf{Composizione}: processo di creazione di messaggi e risposte, che comprende
+        assistenza per l’indirizzario dei corrispondenti e i numerosi campi di
+        intestazione associati a ogni messaggio. Si pensi ai casi in cui si sceglie di
+        rispondere ad una mail e vengono predisposti già alcuni campi;
+        \item \textbf{Visualizzazione}: lettura dei messaggi in arrivo, che comprende fasi preliminari
+        di conversione per gli allegati e strumenti per l’archiviazione dei messaggi;
+        \item \textbf{Collocazione}: operazione svolta dal destinatario con il messaggio dopo la
+        ricezione. Il messaggio può essere cancellato, recuperato, riletto, inoltrato o
+        elaborato in altri modi.
+    \end{itemize}
+
+    \item \textbf{MTA (Mail Transfer Agent, agente di trasferimento)}: sposta i messaggi dall’origine
+    alla destinazione (es: sendmail).
+    Corrisponde al “postino” della posta reale, con le seguenti funzionalità:
+    \item \textbf{Trasferimento}: spostamento dei messaggi dal mittente al destinatario. Avviene
+    tramite l’attivazione di una sessione con il server di destinazione o qualche
+    macchina intermedia qualora il server sia congestionato o irraggiungibile e sia
+    disponibile il servizio di \textbf{\textit{mail relay}}, un gestore di posta secondario, che in caso
+    di necessità sia in grado di salvare temporaneamente i messaggi in transito,
+    facendo le veci del server di destinazione. Siccome veniva sfruttata dagli
+    spammer, che si fingevano server secondari, adesso si indicano espressamente
+    gli host dai quali si accetta relaying;
+    \item \textbf{Reporting}: comunicazione al mittente di ciò che è avvenuto al messaggio, ad
+    esempio se è stato consegnato, rifiutato, perso o si è presentato qualche errore.
+\end{itemize}
+
+Nel caso di sendmail, la configurazione manuale (da scrivere nel file
+\textbf{/etc/mail/sendmail.cf}), è diventata nel tempo complessa, ed è stata semplificata
+mediante l’uso di uno pseudolinguaggio denominato \textbf{M4}, che consente di attivare delle
+funzioni mediante invocazione di macro. Alcuni file che riguardano sendmail sono:
+\begin{itemize}
+    \item \textbf{/etc/mail/access}: domini o host per i quali si controlla l’accesso;
+    \item \textbf{/etc/mail/relay-domains}: domini per i quali si accetta relaying;
+    \item \textbf{/etc/mail/sendmail.cw}: domini per i quali si fa virtual hosting;
+    \item \textbf{/etc/aliases}: alias per indirizzi di posta elettronica.
+\end{itemize}
+
+La maggior parte dei sistemi di posta consente di creare \textbf{mailbox (caselle di posta)} per
+archiviare la posta in arrivo di singoli utenti. Talvolta però, può risultare utile inviare un
+messaggio a più persone correlate tra loro. Da qui nasce l’idea delle \textbf{mailing list}, elenchi di
+posta elettronica, in cui quando viene inviato un messaggio, copie identiche vengono
+consegnate a tutti i membri dell’elenco. Tutti gli indirizzi di posta elettronica sono del tipo:
+\begin{center}
+    \textbf{utente@indirizzo-dns}
+\end{center}
+Dove indirizzo-dns è un dominio DNS (che può contenere sottodomini).
+    subsection{RFC822}
+    RFC822 definisce una serie di campi di intestazione per le e-mail. Ogni campo consiste in una
+    singola riga di testo ASCII contenente il nome del campo, un carattere di due punti e, per la
+    maggior parte dei campi, un valore.\\
+    Di seguito vengono elencati i campi di intestazione principali:
+    %inserire tabella 1 pagina 44%
+
+        \subsubsection{MIME}
+        Per poter far fronte alle nuove esigenze di codifica di caratteri speciali (es: accenti, alfabeti non
+        latini…) e contenuti multimediali (es: audio, immagini…), gli RFC1341 e 1521 hanno introdotto
+        lo standard di codifica \textbf{MIME (Multipurpose Internet Mail Extensions)}. Esso aggiunge nuovi
+        campi di intestazione all’RFC822, senza influire sul normale funzionamento del MTA.\\
+        Di seguito alcuni dei più importanti:
+        %inserire tabella 2 pagina 44%
+
+        Per il Content-Transfer-Encoding di seguito sono elencati i principali schemi di codifica:
+        \begin{itemize}
+            \item \textbf{ASCII}: la codifica più diffusa, rappresenta i caratteri in 7 bit e per ciascuna riga del
+            messaggio non si può eccedere i 1000 caratteri;
+            \item \textbf{EBCDIC}: come ASCII e con la sua stessa limitazione, ma rappresenta i caratteri in 8 bit;
+            \item \textbf{Base64}: a volte chiamato armatura ASCII, è utilizzata spesso per rappresentare i file
+            binari che violano il limite di 1000 caratteri per riga. Vengono fatti gruppi di 24 bit, a
+            loro volta suddivisi in 4 unità di 6 bit, che vengono inviate come carattere ASCII legale.
+            Le sequenze == e = indicano rispettivamente che l’ultimo gruppo contiene 8 o 16 bit;
+            \item \textbf{Quoted-printable}: per i messaggi quasi interamente ASCII ma contenenti alcuni
+            messaggi non ASCII, la codifica base64 è inefficiente e dal suo posto si utilizza questa. Si
+            tratta di ASCII a 7 bit, con tutti i caratteri superiori a 127 codificati come segni uguale
+            seguiti dal carattere espresso da due cifre esadecimali.
+        \end{itemize}
+        
+        Il \textit{Content-Type} è costituito da 7 tipi, ognuno con un certo numero di sottotipi, ed è nella forma:
+        \begin{center}
+            \textbf{Content-Type: tipo/sottotipo}
+        \end{center}
+        I 7 tipi sono: \underline{Text, Image, Audio, Video, Application, Message, Multipart.}
+
+    \subsection{Il trasferimento dei messaggi: SMTP}
+    
+    \textbf{SMTP (Simple Mail Transfer Protocol)} è un protocollo adibito al trasporto di messaggi
+    efficiente ed affidabile, in ambienti eterogenei che coinvolgono un client ed un server (dove il
+    server può essere il destinatario finale o un server intermedio) tramite la realizzazione di un
+    \textbf{IPCE (InterProcess Comunication Environment)}, ossia la realizzazione di un circuito
+    virtuale tra server e client che consente la consegna del messaggio.
+    Come prima cosa, il client stabilisce una connessione \textbf{TCP} con la \textbf{porta 25} del server ed attende
+    una risposta. Il server invia quindi una riga di testo che comunica la sua identità e la possibilità
+    di inviare la posta, con conseguente attivazione del canale trasmissivo. Se ciò non avviene, il
+    client rilascia la connessione e riprova in seguito.\\
+
+    Una volta attivato il canale, il primo comando obbligatorio che il client deve inviare è \textbf{HELO},
+    necessario per inizializzare una sessione SMTP ed identificarsi. Se l’argomento non è
+    accettabile, il server ritorna un errore 501 Failure.\\
+    
+    In seguito, il client può inviare una sequenza di comandi, a passi bloccanti. Per l’invio di
+    messaggi, si usano in sequenza:
+    \begin{itemize}
+        \item \textbf{MAIL FROM}: viene passato l’indirizzo del mittente;
+        \item \textbf{RCPT TO}: viene passato l’indirizzo del destinatario. Può essere ripetuto per specificare
+        più destinatari;
+        \item \textbf{DATA}: vengono passati i dati del messaggio. Al termine dell’immissione del testo, deve
+        seguire la sequenza \textbf{<CR><LF>.<CR><LF>}, dove <CR><LF> è una serie di caratteri che
+        viene interpretato come “vai a capo”.
+    \end{itemize}
+    
+    La transazione può essere abortita in qualsiasi momento, con il comando \textbf{RSET}. Ogni qualvolta
+    il server interpreta correttamente un messaggio, risponde con \textbf{OK}. Altri comandi utilizzabili
+    ovunque durante una sessione sono NOOP, HELP, EXPN e VRFY. L’ultimo comando di una
+    sessione è \textbf{QUIT}.
+    
+    \subsection{POP3}
+
+    \textbf{POP3 (Post Office Protocol version 3)}, noto anche come \textbf{Popper}, è un protocollo client-server
+    che permette l’accesso da remoto ad un server di posta elettronica. Una volta connesso al
+    server, è possibile recuperare la posta (conservandola in locale) e/o cancellare i messaggi dal
+    server SMTP. Si noti che l’invio della posta resta comunque affidato a SMTP.\\
+
+    Esso viene avviato quando l’utente apre il lettore della posta. Il lettore della posta chiama l’ISP
+    (a meno che sia già disponibile una connessione) e stabilisce una connessione TCP con il MTA
+    sulla porta 110. Una volta stabilita la connessione, POP3 attraversa sequenzialmente 3 stati:\\
+    \begin{itemize}
+        \item \textbf{Authorization}: login dell’utente (si noti che le credenziali vengono passate in chiaro),
+        effettuato tramite i comandi \textbf{USER} e \textbf{PASS};
+        \item \textbf{Transaction}: ottenimento o cancellazione della posta dalla casella dell’ISP. I comandi
+        utilizzati sono:
+        \begin{itemize}
+            \item \textbf{STAT}: ritorna numero dei messaggi nella casella e dimensione in byte;
+            \item \textbf{LIST} [msg]: dato un msg (ID del messaggio), ritorna ID e dimensione. Se non si
+            passa alcun ID, elenca tutti i messaggi (con ID e dimensione di ognuno);
+            \item \textbf{RETR} msg: ricezione del messaggio specificato;
+            \item \textbf{DELE} msg: cancellazione del messaggio specificato;
+            \item \textbf{NOOP}: No Operation, si usa per mantenere la connessione aperta;
+            \item \textbf{LAST}: ritorna l’ID dell’ultimo messaggio ricevuto;
+            \item \textbf{RSET}: resetta la connessione al suo stato iniziale, smarcando tutti i messaggi
+            marcati per l’eliminazione.
+        \end{itemize}
+        \item \textbf{Update}: provoca l’effettiva eliminazione della posta, terminando la sessione. Si effettua
+        tramite il comando \textbf{QUIT}.
+    \end{itemize}
+    
+    Il server risponde alle richieste con esito positivo (\textbf{+OK}) oppure con esito negativo (\textbf{-ERR}).
+
+    \subsection{IMAP}
+    Uno svantaggio di POP3 è che i messaggi devono essere scaricati sul client per poter essere letti.
+    Si pensi al caso in cui si vuole accedere alla stessa casella di posta elettronica da macchine
+    diverse (smartphone, portatile, computer fisso…): utilizzando POP3, si ottiene come risultato
+    che la posta dell’utente viene rapidamente dispersa su più macchine.\\
+
+    Questo svantaggio ha portato alla nascita di un protocollo di consegna alternativo, \textbf{IMAP
+    (Internet Message Access Protocol)}, un protocollo definito in RFC2060 che utilizza la porta
+    143. A differenza di POP3, che presume l’utente cancelli la casella di posta ogni volta, IMAP
+    presume che tutti i messaggi rimangano sul server per un tempo indeterminato.\\
+
+    Le differenze e migliorie con POP3 non sono poche e di seguito se ne vedono alcune:
+    \begin{itemize}
+        \item \textbf{Decine di nuovi comandi e opzioni} (molta più flessibilità e personalizzazione);
+        \item \textbf{Leggere in tutto o in parte i messaggi} (il che ad esempio è utile mentre si utilizza un
+        modem lento, per leggere il testo di un messaggio con grandi allegati audio e video);
+        \item \textbf{Effettuare ricerche indicizzate} (senza il bisogno di scaricare tutte le mail);
+        \item \textbf{Sincronizzazione} tra i vari client (nel caso si acceda da più client simultaneamente);
+        \item \textbf{Supporto per attributi dei messaggi} (per esempio per sapere se un messaggio è già
+        stato letto o se ha avuto una risposta).
+    \end{itemize}
+    
+
+    \subsection{Posta Elettronica Privata}
+    \textit{L’argomento è stato trattato in maniera sintetica.}\\
+        
+    Anche per la posta elettronica può essere necessario garantire la segretezza dei messaggi, ma
+    nativamente non ci sono meccanismi che possono garantirla. È risaputo che crittografia e
+    certificati digitali permettono di risolvere questo problema, e sono diversi i software che sono
+    stati creati per implementarli nelle mail.
+
+        \subsubsection{PGP}
+        \textbf{PGP (Pretty Good Privacy)} è una famiglia di software multipiattaforma di crittografia
+        utilizzati per autenticazione e privacy. Nell’ambito della posta elettronica, consente la
+        crittografazione, la firma digitale e la compressione dei messaggi ed è attualmente utilizzato da
+        Enigmail e Mozilla Thunderbird. Utilizza 3 algoritmi di crittografazione durante le sue
+        operazioni: \textbf{RSA, IDEA} e \textbf{MD5}.\\
+
+        Un’alternativa Open Source è \textbf{GnuPG}, pensato come rimpiazzato di PGP. Utilizza un metodo per
+        la condivisione efficiente delle chiavi pubbliche, usando una rete particolare: \textbf{Web of Trust}.
