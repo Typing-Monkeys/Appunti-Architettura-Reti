@@ -1,0 +1,119 @@
+\section{World Wide Web}
+    Il \textbf{World Wide Web} (abbreviato \textbf{WWW} o \textbf{Web}) è un’architettura che consente di accedere a
+    documenti distribuiti su un vasto numero di macchine nell’Internet globale.\\
+
+    I documenti sono tecnicamente chiamati \textbf{pagine Web} (spesso dette solo \textbf{pagine} per brevità) e
+    possono essere di 2 tipi: \textbf{statiche} (la pagina ha sempre lo stesso contenuto ad ogni
+    visualizzazione) o \textbf{dinamiche} (viene generato il contenuto della pagina ad ogni richiesta,
+    tramite un linguaggio di scripting come il PHP). Ogni pagina è localizzata da uno o più \textbf{URL
+    (Uniform Resource Locator)}, una stringa composta di 3 parti:
+
+        \begin{itemize}
+            \item Il nome del protocollo (es: http, https);
+            \item Il nome DNS della macchina su cui è sita la risorsa (es: \url{www.unipi.it});
+            \item La posizione locale sul server della risorsa richiesta (es: index.php).
+        \end{itemize}
+
+    Un esempio di URL è quindi: \url{https://www.unipi.it/index.php}. Si noti che l’URL è un tipo
+    specifico di \textbf{URI (Uniform Resource Identifier)}. La differenza sta nel fatto che l’URI identifica
+    una risorsa, mentre l’URL la localizza. Si noti che localizzare una risorsa vuol dire
+    conseguentemente anche identificarla, ma non è sempre vero il contrario, per cui i due termini
+    non possono essere usati come sinonimi: ad esempio, l’ISBN di un libro x è un URI (in quanto
+    univoco), ma non localizza il libro, per cui non è anche un URL.\\
+    
+    Ogni pagina può contenere collegamenti ad altre pagine situate ovunque nel mondo. L’insieme
+    delle pagine collegate tra loro è detto \textbf{hypertext (ipertesto)}, ed il collegamento cliccabile che
+    reindirizza ad altre pagine è detto \textbf{hyperlink} o \textbf{link (collegamento ipertestuale)}.\\
+
+    Il software per l’ottenimento, il rendering e la navigazione di pagine è detto \textbf{browser}.
+
+\subsection{HTTP}
+    Il protocollo di trasferimento usato sul Web è \textbf{HTTP (HyperText Transfer Protocol)}, un
+    protocollo \textbf{stateless} (ovvero non salva informazioni sulla sessione) che permette la
+    realizzazione di sistemi informativi distribuiti, collaborativi ed ipermediali (ossia composti da
+    multimedialità distribuita nella rete ed acceduta mediante hyperlink).\\
+
+    Il metodo utilizzato da un browser per contattare un server prevede di stabilire una
+    connessione TCP di solito alla porta 80. Da HTTP/1.1 sono supportate le \textbf{connessioni
+    persistenti}, che permettono di inviare più di una richiesta al server con la stessa connessione.\\
+
+    Una \textbf{HTTP request} (richiesta HTTP) è composta da:
+
+        \begin{itemize}
+            \item \textbf{Request line}: singola stringa composta da un metodo (\textbf{GET, POST, HEAD, PUT,
+            DELETE, TRACE, OPTIONS} o \textbf{CONNECT}), un URL e la versione del protocollo.
+            Un esempio è: GET url_del_file HTTP/1.1;
+            \item \textbf{Header}: una o più stringhe contenenti ulteriori informazioni, seguiti da una riga vuota.
+            Tra i più comuni vi sono:
+
+            \begin{itemize}
+                \item \textbf{Host}: indica il nome del server a cui si riferisce l’URL;
+                \item \textbf{User-agent}: identifica il tipo di client: tipo di browser, versione, ecc.;
+                \item \textbf{Cookie}: utilizzati dalle applicazioni web per archiviare e recuperare
+                informazioni a lungo termine sul lato client.
+            \end{itemize}
+
+            \item \textbf{Body}: dati opzionali che si vogliono trasmettere.
+        \end{itemize}
+
+    Una \textbf{HTTP response} (risposta HTTP) è composta da:
+
+        \begin{itemize}
+            \item \textbf{Status line}: una riga contente uno status code ed un messaggio esplicativo. Gli status
+            code sono dei numeri a 3 cifre che la cui prima cifra specifica una delle 5 categorie:
+
+            \begin{itemize}
+                \item 1xx Informational;
+                \item 2xx Success;
+                \item 3xx Redirection;
+                \item 4xx Client Error;
+                \item 5xx Server Error.
+            \end{itemize}
+
+            \item \textbf{Header}: una o più stringhe contenenti ulteriori informazioni, seguiti da una riga vuota.
+            Tra i più comuni vi sono:
+
+            \begin{itemize}
+                \item \textbf{Content-Type}: contiene il tipo MIME della pagina;
+                \item \textbf{Server}: contiene informazioni sul server;
+                \item \textbf{Set-Cookie}: contiene un cookie che il server vuole che il client salvi.
+            \end{itemize}
+
+            \item \textbf{Body}: dati opzionali che si vogliono restituire.
+        \end{itemize}
+
+    Vi sono state varie versioni di HTTP. Di seguito vengono analizzati in breve i cambiamenti
+    principali tra le versioni:
+
+        \begin{itemize}
+            \item \textbf{HTTP/0.9}: semplice protocollo per il trasferimento di dati grezzi sulla rete Internet,
+            prima di esso il protocollo di riferimento per tali scopi era FTP;
+            \item \textbf{HTTP/1.0}: pur consentendo il trasferimento di messaggi di tipo MIME, non era adatto
+            a supportare la crescita esponenziale del Web;
+            \item \textbf{HTTP/1.1}: versione consolidata del protocollo, utilizzata per ben 15 anni;
+            \item \textbf{HTTP/2.0}: nuovo standard basato su un protocollo sviluppato da Google chiamato
+            SPDY/2, che va a migliorare di molto le prestazioni mantenendo la retrocompatibilità
+            per applicazioni già sviluppate;
+        \end{itemize}
+
+    \subsection{Pagine Web dinamiche}
+        Come anticipato, esistono due categorie di pagine web: statiche e dinamiche. Per richiedere una
+        pagina statica il procedimento è banale: si effettua una HTTP request con il nome del file e si
+        ottiene una HTTP response con il documento richiesto. Per le pagine dinamiche il procedimento
+        è un po’ più articolato poiché, una volta ricevuta la richiesta HTTP, il documento va generato su
+        richiesta, con possibilità che ciò avvenga sia lato client che server.\\
+
+        Per gestire le pagine Web dinamiche \textbf{lato server}, è possibile utilizzare un sistema chiamato \textbf{CGI
+        (Common Gateway Interface)}. È un’interfaccia standardizzata che consente ai server Web di
+        comunicare con script e programmi di back-end che possono accettare l’input e generare
+        pagine HTML in risposta. Un linguaggio usato per la scrittura di CGI è \textbf{Perl}. È anche possibile
+        \textbf{incorporare piccoli script nelle pagine HTML} stesse (ad esempio con il \textbf{PHP}), e farli eseguire
+        al momento della generazione.\\
+
+        Il processo, che inizia alla ricezione di una HTTP request e termina all’invio di una HTTP
+        response è detto \textbf{round trip}, ed essendo HTTP un protocollo stateless, i linguaggi di scripting
+        server-side mettono a disposizione apposite variabili dette \textbf{variabili di sessione}, per poter
+        salvare dei dati tra una connessione e l’altra.\\
+
+        Per gestire le pagine Web dinamiche \textbf{lato client}, è necessario allo stesso modo incorporare
+        degli script nelle pagine HTML. Il linguaggio di script più popolare per il lato client è \textbf{JavaScript}.
